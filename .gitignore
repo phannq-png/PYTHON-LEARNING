@@ -1,0 +1,19 @@
+# Python bytecode (file biên dịch)
+__pycache__/
+*.py[cod]
+
+# Môi trường ảo (Virtual Environment)
+venv/
+env/
+.venv/
+
+# Database (Vì bạn muốn up code sạch, không up dữ liệu cá nhân)
+*.db
+*.sqlite3
+
+# File cấu hình cá nhân hoặc nhạy cảm
+.env
+*.log
+
+# Folder của VS Code
+.vscode/
