@@ -142,7 +142,11 @@ File cấu hình mã hóa lưu trữ:
 
 #### 4.2.1 Cấu trúc Bố cục
 Cửa sổ chính được chia thành:
-- **Thanh Trên**: Nút upload file, Dropdown chọn lĩnh vực, Nút Export
+- **Menu Bar**: Thanh menu hệ thống nằm trên cùng cửa sổ, chứa các mục:
+  - `File`: Mở file, Thoát ứng dụng
+  - `Settings`: Segmentation Settings (mở Dialog), API Settings (mở Dialog)
+  - `Help`: About
+- **Thanh Trên (Top Bar)**: Nút upload file, Dropdown chọn lĩnh vực, Nút Export
 - **Thanh Bên Trái**: Danh sách điều hướng trang
 - **Panel Trung tâm (Chia ngang)**:
   - Trên: Văn bản tiếng Nhật (chỉ đọc)
