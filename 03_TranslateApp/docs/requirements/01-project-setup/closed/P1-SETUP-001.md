@@ -6,7 +6,7 @@
 - **Phase**: 1
 - **Estimated Effort**: XS
 - **Dependencies**: None
-- **Status**: opening
+- **Status**: closed
 
 ## Mô tả
 
@@ -15,16 +15,16 @@ Tạo nền tảng cơ bản cho ứng dụng, bao gồm các file gốc và c�
 
 ### Phạm vi
 **Làm:**
-- [ ] Khởi tạo virtual environment
-- [ ] Cài đặt các thư viện bắt buộc trong requirements.txt
-- [ ] Thiết lập file main.py cơ bản để chạy app
+- [x] Khởi tạo virtual environment
+- [x] Cài đặt các thư viện bắt buộc trong requirements.txt
+- [x] Thiết lập file main.py cơ bản để chạy app
 
 **KHÔNG làm:**
 - Code giao diện thực tế (sẽ làm ở P1-UI-001)
 
 ### Acceptance Criteria
-- [ ] AC1: File `main.py` chạy thành công mà không văng lỗi thư viện.
-- [ ] AC2: Chứa đủ các thư viện yêu cầu trong `requirements.txt`.
+- [x] AC1: File `main.py` chạy thành công mà không văng lỗi thư viện.
+- [x] AC2: Chứa đủ các thư viện yêu cầu trong `requirements.txt`.
 
 ### Technical Notes
 - Ứng dụng dùng Python 3.10+
@@ -46,7 +46,7 @@ Tạo nền tảng cơ bản cho ứng dụng, bao gồm các file gốc và c�
 ## Testing Checklist
 
 ### Manual Testing
-- [ ] Chạy `python main.py` kiểm tra start ứng dụng
+- [x] Chạy `python main.py` kiểm tra start ứng dụng
 
 ## References
 - REQUIREMENTS_VI.md: Section 7 & 8
