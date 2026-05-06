@@ -134,6 +134,7 @@ git branch -d feat/[tên-tính-năng]
 
 ## 📏 Quy tắc làm việc (Rules)
 - **Tuân thủ** quy trình 3 bước (Clarify - Plan - Execute) trong `GEMINI.md` ở root.
+- **Tuân thủ chặt chẽ** các quy chuẩn lập trình (Coding Convention) được định nghĩa tại `docs/styleguides/python_styleguide.md` (đặc biệt là chuẩn PEP 8, Naming Conventions, Type Hints và định dạng code).
 - Code viết bằng **tiếng Anh**, comment business logic bằng **tiếng Việt**.
 - **KHÔNG commit** API keys, secrets, connection strings — dùng biến môi trường hoặc file `.secret.key`.
 - Mỗi Task/Issue là một commit riêng biệt, message theo chuẩn Conventional Commits.
