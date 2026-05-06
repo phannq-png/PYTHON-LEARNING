@@ -81,12 +81,7 @@ class TextSegmenter:
                         current_segment = []
                     current_segment.append(line)
                 else:
-                    # Do not split.
-                    # If this is the very first line overall, start the first segment anyway
-                    if not segments and not current_segment:
-                        current_segment.append(line)
-                    else:
-                        current_segment.append(line)
+                    current_segment.append(line)
 
         # Append the last segment
         if current_segment:
