@@ -93,12 +93,24 @@ git checkout -b fix/issue-[số]-[tên-ngắn]
 ```
 
 **Bước 2 — Làm việc & Commit**
-```bash
-# Commit thường xuyên, mỗi commit là một thay đổi có ý nghĩa
-git add .
-git commit -m "feat(scope): mô tả thay đổi"
-# Fix issue phải thêm closes
-git commit -m "fix(scope): mô tả fix — closes #12"
+
+> ⚠️ **BẮT BUỘC**: Luôn sử dụng Dev Skill `dev-commit.ps1` thay vì gọi `git add` + `git commit` riêng lẻ. Điều này giúp tự động chạy test trước khi commit và giảm số lần P phải approve.
+
+```powershell
+# Stage file cụ thể + chạy test tự động + commit (1 lần approve duy nhất)
+.\.antigravity\skills\dev-commit.ps1 `
+    -Files "src/core/segmenter.py,tests/test_segmenter.py" `
+    -Message "feat(scope): mô tả thay đổi"
+
+# Stage tất cả thay đổi + chạy test tự động + commit
+.\.antigravity\skills\dev-commit.ps1 `
+    -Message "refactor(scope): mô tả thay đổi"
+
+# Bỏ qua test (chỉ dùng khi commit doc/config)
+.\.antigravity\skills\dev-commit.ps1 `
+    -Files "docs/..." `
+    -Message "docs(scope): mô tả thay đổi" `
+    -SkipTests
 ```
 
 **Bước 3 — Tạo Pull Request vào develop**
@@ -132,6 +144,14 @@ git branch -d feat/[tên-tính-năng]
 - Force push (`git push --force`) vào `main` hoặc `develop`.
 - Merge PR khi chưa được **TL** approve.
 
+## 🧰 Dev Skills
+
+Các script tự động hóa quy trình làm việc nằm trong `.antigravity/skills/`. Developer **BẮT BUỘC** sử dụng các skill này thay vì gọi lệnh thủ công.
+
+| Skill | Mục đích | Khi nào dùng |
+|---|---|---|
+| `dev-commit.ps1` | Chạy test → stage → commit trong 1 lệnh | Mỗi khi cần commit code |
+
 ## 📏 Quy tắc làm việc (Rules)
 - **Tuân thủ** quy trình 3 bước (Clarify - Plan - Execute) trong `GEMINI.md` ở root.
 - **Tuân thủ chặt chẽ** các quy chuẩn lập trình (Coding Convention) được định nghĩa tại `docs/styleguides/python_styleguide.md` (đặc biệt là chuẩn PEP 8, Naming Conventions, Type Hints và định dạng code).
@@ -140,6 +160,7 @@ git branch -d feat/[tên-tính-năng]
 - Mỗi Task/Issue là một commit riêng biệt, message theo chuẩn Conventional Commits.
 - Commit fix issue phải có **closes #[số issue]** để tự động đóng issue khi merge.
 - Nếu gặp vấn đề ngoài phạm vi Task, **DỪNG và báo cáo P**, không tự ý mở rộng.
+- **BẮT BUỘC dùng Dev Skills** cho các thao tác đã có skill — không gọi lệnh thủ công.
 
 ---
 *Developer — Triển khai giải pháp kỹ thuật tối ưu.*
