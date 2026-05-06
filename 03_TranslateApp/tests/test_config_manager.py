@@ -19,7 +19,7 @@ class TestConfigManager(unittest.TestCase):
     def tearDown(self):
         # Clean up the test directory after each test
         if os.path.exists(self.test_data_dir):
-            shutil.rmtree(self.test_data_dir)
+            shutil.rmtree(self.test_data_dir, ignore_errors=True)
 
     def test_ensure_config_dir_and_key_creation(self):
         self.assertTrue(self.config_dir.exists())
