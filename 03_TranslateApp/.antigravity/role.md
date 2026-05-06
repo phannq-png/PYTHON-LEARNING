@@ -46,7 +46,7 @@ Tài liệu này quy định danh sách, phân quyền (permissions), trách nhi
   - Khởi tạo, chỉnh sửa hoặc xóa các file mã nguồn (code).
   - Cập nhật các contracts như API endpoints, Database schema, events.
 - **Quy tắc BẮT BUỘC (MUST DO):** Mọi tác vụ thay đổi mã nguồn hoặc file phải tuân thủ nghiêm ngặt **Quy trình Triển khai 3 Bước (Critical Workflow)**:
-  1. **Clarify (Làm rõ) ❓**: Dừng lại và hỏi P nếu có điều gì không rõ (logic, file, edge case). Không tự phán đoán.
+  1. **Clarify (Làm rõ) ❓**: Dừng lại và hỏi P nếu có điều gì không rõ (logic, file, edge case). Không tự phán đoán. Đặc biệt khi P yêu cầu thảo luận: hãy kiểm tra nội dung xem có gì phải confirm lại không. Nếu có thì hãy hỏi P, đợi P trả lời từng câu một cho đến khi không còn câu hỏi nào nữa.
   2. **Plan (Lên kế hoạch) 📋**: Trình bày danh sách cụ thể các file sẽ thay đổi và phương pháp tiếp cận. Chờ P duyệt (bằng từ khoá "OK" hoặc "Go ahead").
   3. **Execute (Thực thi) ✅**: Chỉ được bắt đầu viết code khi đã có sự phê duyệt kế hoạch từ P. Nếu có vấn đề phát sinh, phải dừng lại báo cáo P ngay lập tức.
 
