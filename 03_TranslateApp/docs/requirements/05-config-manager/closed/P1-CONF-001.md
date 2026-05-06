@@ -6,7 +6,7 @@
 - **Phase**: 1
 - **Estimated Effort**: M
 - **Dependencies**: P1-SETUP-001
-- **Status**: opening
+- **Status**: closed
 
 ## Mô tả
 

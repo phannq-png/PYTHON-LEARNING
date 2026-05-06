@@ -6,6 +6,7 @@
 - **Phase**: 1
 - **Estimated Effort**: S
 - **Dependencies**: P1-SEG-001, P1-UI-001
+- **Status**: closed
 
 ## Mô tả
 
