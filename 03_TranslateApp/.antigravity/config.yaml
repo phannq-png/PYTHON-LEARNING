@@ -1,0 +1,39 @@
+project_name: FamilyTreeDX
+version: 1.0.0
+
+agents:
+  pm:
+    role: Project Manager
+    path: .antigravity/agents/PM.md
+  ba:
+    role: Business Analyst & System Architect
+    path: .antigravity/agents/BA.md
+  tl:
+    role: Technical Leader
+    path: .antigravity/agents/TL.md
+  developer:
+    role: Developer
+    path: .antigravity/agents/Developer.md
+  tester:
+    role: Tester
+    path: .antigravity/agents/Tester.md
+
+skills:
+  - name: code-review
+    path: .antigravity/skills/code-review.md
+  - name: schema-design
+    path: .antigravity/skills/schema-design.md
+  - name: api-design
+    path: .antigravity/skills/api-design.md
+
+exclude_paths:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.next/**"
+  - "**/.git/**"
+  - "**/.vscode/**"
+  - "**/ios/Pods/**"
+  - "**/android/app/build/**"
+  - "**/*.sqlite"
+  - "**/*.db"

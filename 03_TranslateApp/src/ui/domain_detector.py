@@ -1,0 +1,1 @@
+"""Domain detector UI."""
