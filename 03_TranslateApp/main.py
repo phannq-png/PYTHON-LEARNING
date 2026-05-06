@@ -1,28 +1,18 @@
-import customtkinter as ctk
-import docx
-import cryptography
-import markdown
+"""Application entry point for TranslatorApp."""
 
-def main():
-    # Cấu hình giao diện mặc định
+import customtkinter as ctk
+
+from src.ui.app_window import AppWindow
+
+
+def main() -> None:
+    # Cấu hình giao diện mặc định — phải set trước khi tạo bất kỳ widget nào
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("blue")
 
-    # Khởi tạo cửa sổ chính
-    root = ctk.CTk()
-    root.title("Translate App - Setup Test")
-    root.geometry("400x200")
+    app = AppWindow()
+    app.mainloop()
 
-    # Thêm Label để kiểm tra hiển thị
-    label = ctk.CTkLabel(root, text="Project Setup Successful!", font=ctk.CTkFont(size=20, weight="bold"))
-    label.pack(pady=40)
 
-    # Hiển thị phiên bản thư viện
-    version_label = ctk.CTkLabel(root, text=f"CustomTkinter v{ctk.__version__}")
-    version_label.pack()
-
-    # Chạy ứng dụng
-    root.mainloop()
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
