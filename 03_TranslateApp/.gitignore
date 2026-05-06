@@ -43,7 +43,7 @@ logs/
 *.db
 
 # Application specific (TranslatorApp)
-data/
+/data/
 sessions/
 output/
 temp/

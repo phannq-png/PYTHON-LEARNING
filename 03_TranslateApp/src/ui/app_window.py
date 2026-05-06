@@ -14,8 +14,10 @@ from tkinter import messagebox
 
 import customtkinter as ctk
 
+from src.data.config_manager import ConfigManager
 from src.ui.components.bottom_bar import BottomBar
 from src.ui.components.center_panel import CenterPanel
+from src.ui.segmentation_settings import SegmentationSettingsDialog
 from src.ui.components.left_sidebar import LeftSidebar
 from src.ui.components.right_sidebar import RightSidebar
 from src.ui.components.top_bar import TopBar
@@ -33,6 +35,8 @@ class AppWindow(ctk.CTk):
 
     def __init__(self) -> None:
         super().__init__()
+        self.config_manager = ConfigManager()
+        self.seg_dialog = None
         self._configure_window()
         self._build_menu_bar()
         self._build_layout()
@@ -129,12 +133,11 @@ class AppWindow(ctk.CTk):
         pass
 
     def _open_segmentation_settings(self) -> None:
-        """Open Segmentation Settings dialog (placeholder until P1-CONF-002)."""
-        messagebox.showinfo(
-            "Segmentation Settings",
-            "Chức năng này sẽ được hoàn thiện ở task P1-CONF-002.",
-            parent=self,
-        )
+        """Open Segmentation Settings dialog."""
+        if self.seg_dialog is None or not self.seg_dialog.winfo_exists():
+            self.seg_dialog = SegmentationSettingsDialog(self, self.config_manager)
+        else:
+            self.seg_dialog.focus()
 
     def _open_api_settings(self) -> None:
         """Open API Settings dialog (placeholder until feature 08-api-integration)."""
