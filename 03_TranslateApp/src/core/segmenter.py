@@ -17,14 +17,14 @@ class TextSegmenter:
     def _get_plain_text_length(self, text: str) -> int:
         """Calculate the length of the text without Markdown formatting."""
         # Remove bold/italic (**text**, *text*, __text__, _text_)
-        text = re.sub(r'(\*\*|__)(.*?)\1', r'\2', text)
-        text = re.sub(r'(\*|_)(.*?)\1', r'\2', text)
+        text = re.sub(r'(\*\*|__)(.*?)\1', r'\2', text, flags=re.DOTALL)
+        text = re.sub(r'(\*|_)(.*?)\1', r'\2', text, flags=re.DOTALL)
         # Remove strikethrough (~~text~~)
-        text = re.sub(r'~~(.*?)~~', r'\1', text)
+        text = re.sub(r'~~(.*?)~~', r'\1', text, flags=re.DOTALL)
         # Remove inline code (`text`)
-        text = re.sub(r'`(.*?)`', r'\1', text)
+        text = re.sub(r'`(.*?)`', r'\1', text, flags=re.DOTALL)
         # Remove links [text](url)
-        text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
+        text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text, flags=re.DOTALL)
         return len(text)
 
     def _is_marker_at_start(self, line: str) -> bool:
@@ -36,6 +36,24 @@ class TextSegmenter:
         for marker in self.custom_markers:
             if stripped_line.startswith(marker):
                 return True
+        return False
+
+    def _should_split_line(self, line: str, is_first_line_of_para: bool) -> bool:
+        """Determine if a line should start a new segment."""
+        if self._is_marker_at_start(line):
+            # If marker exists at the start of any line (after Enter or Soft Return), split
+            return True
+            
+        if self.custom_markers:
+            # "Combination" logic: if markers are defined, ONLY split if there is a marker.
+            return False
+            
+        # Basic logic: no custom markers defined.
+        if is_first_line_of_para and self.split_on_enter:
+            return True
+        if not is_first_line_of_para and self.split_on_soft_return:
+            return True
+            
         return False
 
     def segment(self, paragraphs: List[str]) -> List[str]:
@@ -54,25 +72,7 @@ class TextSegmenter:
             
             for i, line in enumerate(lines):
                 is_first_line_of_para = (i == 0)
-                
-                # Determine if we should split at this line
-                should_split = False
-                
-                has_marker = self._is_marker_at_start(line)
-                
-                if has_marker:
-                    # If marker exists at the start of any line (after Enter or Soft Return), split
-                    should_split = True
-                else:
-                    if self.custom_markers:
-                        # "Combination" logic: if markers are defined, ONLY split if there is a marker.
-                        should_split = False
-                    else:
-                        # Basic logic: no custom markers defined.
-                        if is_first_line_of_para and self.split_on_enter:
-                            should_split = True
-                        elif not is_first_line_of_para and self.split_on_soft_return:
-                            should_split = True
+                should_split = self._should_split_line(line, is_first_line_of_para)
 
                 if should_split:
                     # Save current segment if it has content
