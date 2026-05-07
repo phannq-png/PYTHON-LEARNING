@@ -1,0 +1,15 @@
+## Thay đổi
+- Cập nhật `.gitignore` để không ignore `src/data/`
+- Tạo `ConfigManager` (P1-CONF-001) với Fernet encryption cho API keys
+- Tạo `SegmentationSettingsDialog` (P1-CONF-002) với UI nhập liệu và gọi `ConfigManager.save_app_config`
+- Tích hợp dialog vào menu `Settings > Segmentation Settings` ở `AppWindow`
+- Viết unit tests cho `ConfigManager`
+
+## Acceptance Criteria
+- [x] AC1: Lưu API Key dạng mã hóa (P1-CONF-001)
+- [x] AC2: Đọc file giải mã được (P1-CONF-001)
+- [x] AC3: Bắt lỗi InvalidToken khi mất secret key
+- [x] AC4: Dialog UI thiết lập phân đoạn mở đúng cách (P1-CONF-002)
+- [x] AC5: Dialog có các thông số max_chars, checkboxes, input custom markers
+- [x] AC6: Validation max_chars phải là số nguyên
+- [x] AC7: Load/Save cấu hình phân đoạn xuống `config.json`
