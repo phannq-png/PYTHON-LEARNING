@@ -1,14 +1,21 @@
 """Top bar component for the main application window."""
 
 import customtkinter as ctk
+from typing import Optional, Callable
 
 
 class TopBar(ctk.CTkFrame):
     """Top bar containing file upload, domain selector, and export button."""
 
-    def __init__(self, master: ctk.CTk, **kwargs) -> None:
+    def __init__(
+        self, 
+        master: ctk.CTk, 
+        on_upload_callback: Optional[Callable[[], None]] = None,
+        **kwargs
+    ) -> None:
         super().__init__(master, height=48, fg_color=("gray85", "gray20"), **kwargs)
         self.pack_propagate(False)
+        self._on_upload_callback = on_upload_callback
         self._build_widgets()
 
     def _build_widgets(self) -> None:
@@ -48,8 +55,9 @@ class TopBar(ctk.CTkFrame):
 
     # ── Placeholder callbacks ───────────────────────────────────────────────
     def _on_upload(self) -> None:
-        """Placeholder: will be wired to document processor logic."""
-        pass
+        """Trigger the upload callback provided by the parent."""
+        if self._on_upload_callback:
+            self._on_upload_callback()
 
     def _on_export(self) -> None:
         """Placeholder: will be wired to export logic."""
