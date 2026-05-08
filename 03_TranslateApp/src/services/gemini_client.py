@@ -1,11 +1,12 @@
-"""Google Gemini API client."""
+"""Google Gemini API client using the modern google-genai SDK."""
 
 import json
 import logging
 import re
 from typing import Dict, List, Optional, Tuple
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 from src.services.base_client import BaseAIClient
 
@@ -13,14 +14,13 @@ logger = logging.getLogger(__name__)
 
 
 class GeminiClient(BaseAIClient):
-    """Client for interacting with Google Gemini API."""
+    """Client for interacting with Google Gemini API via the new SDK."""
 
     def __init__(self, api_key: str, model_name: str = "gemini-1.5-pro"):
         """Initialize the Gemini client."""
         self.api_key = api_key
         self.model_name = model_name
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel(model_name)
+        self.client = genai.Client(api_key=self.api_key)
 
     def translate(self, text: str, glossary: Optional[Dict[str, str]] = None) -> Tuple[str, int]:
         """Translate Japanese text to Vietnamese with glossary enforcement."""
@@ -33,12 +33,15 @@ class GeminiClient(BaseAIClient):
         prompt += f"\nDịch văn bản sau sang tiếng Việt, giữ nguyên ngữ pháp tự nhiên:\n\n{text}"
         
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt
+            )
             translated_text = response.text.strip()
             
-            # Extract token usage
+            # Extract token usage from the new response format
             tokens = 0
-            if hasattr(response, 'usage_metadata'):
+            if response.usage_metadata:
                 tokens = response.usage_metadata.total_token_count
                 
             return translated_text, tokens
@@ -54,8 +57,7 @@ class GeminiClient(BaseAIClient):
         prompt = (
             "Bạn là một chuyên gia thuật ngữ Nhật-Việt. "
             "Dịch danh sách các thuật ngữ sau đây sang tiếng Việt. "
-            "Yêu cầu trả về kết quả dưới định dạng JSON thuần túy như ví dụ bên dưới, "
-            "không có bất kỳ văn bản giải thích nào khác.\n\n"
+            "Yêu cầu trả về kết quả dưới định dạng JSON thuần túy như ví dụ bên dưới.\n\n"
             "Ví dụ:\n"
             '{"terms": [{"jp": "心臓", "vn": "Tim"}, {"jp": "病院", "vn": "Bệnh viện"}]}\n\n'
             "Danh sách thuật ngữ cần dịch:\n"
@@ -63,26 +65,37 @@ class GeminiClient(BaseAIClient):
         )
 
         try:
-            # Using JSON mode or similar if supported, otherwise rely on prompt
-            response = self.model.generate_content(prompt)
+            # Use the new structured output support if possible, or simple generation
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
+            
             raw_text = response.text.strip()
+            data = json.loads(raw_text)
             
-            # Extract JSON from potential Markdown blocks
-            json_match = re.search(r'\{.*\}', raw_text, re.DOTALL)
-            if json_match:
-                data = json.loads(json_match.group(0))
-                result = {}
-                for item in data.get("terms", []):
-                    result[item["jp"]] = item["vn"]
-                return result
+            result = {}
+            for item in data.get("terms", []):
+                result[item["jp"]] = item["vn"]
+            return result
             
-            return {}
         except Exception as e:
             logger.error(f"Gemini batch translation error: {e}")
+            # Fallback to regex if JSON parsing fails but some text exists
+            try:
+                json_match = re.search(r'\{.*\}', response.text, re.DOTALL)
+                if json_match:
+                    data = json.loads(json_match.group(0))
+                    return {item["jp"]: item["vn"] for item in data.get("terms", [])}
+            except:
+                pass
             raise
 
     def detect_domain(self, text: str) -> str:
-        """Analyze text and suggest a domain name (e.g., medical, it, legal)."""
+        """Analyze text and suggest a domain name."""
         prompt = (
             "Phân tích đoạn văn bản sau và cho biết nó thuộc lĩnh vực chuyên ngành nào "
             "(ví dụ: y tế, công nghệ thông tin, luật, kỹ thuật, kinh tế). "
@@ -91,7 +104,10 @@ class GeminiClient(BaseAIClient):
         )
         
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model="gemini-1.5-flash", # Use faster model for detection
+                contents=prompt
+            )
             return response.text.strip().lower()
         except Exception as e:
             logger.error(f"Gemini domain detection error: {e}")

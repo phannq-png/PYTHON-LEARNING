@@ -325,6 +325,14 @@ class AppWindow(ctk.CTk):
     def _open_api_settings(self):
         ApiSettingsDialog(self, self.config_manager)
 
+    def _open_glossary_manager(self) -> None:
+        """Open the Glossary Manager window."""
+        GlossaryManagerWindow(
+            self,
+            ai_client=self._get_ai_client(),
+            on_change_callback=self._on_glossary_changed
+        )
+
     def _open_segmentation_settings(self):
         if not self.seg_dialog or not self.seg_dialog.winfo_exists():
             self.seg_dialog = SegmentationSettingsDialog(self, self.config_manager)
