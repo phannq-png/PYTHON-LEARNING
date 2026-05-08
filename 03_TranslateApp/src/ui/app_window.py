@@ -269,18 +269,20 @@ class AppWindow(ctk.CTk):
 
     # ── Helper Utils ───────────────────────────────────────────────────────
 
-    def _get_ai_client(self) -> BaseAIClient:
-        """Initialize and return the active AI client from configuration."""
+    def _get_ai_client(self) -> Optional[BaseAIClient]:
+        """Initialize and return the active AI client. Returns None if key is missing."""
         cfg = self.config_manager.load_api_config()
         provider = cfg.get("active_provider", "gemini")
         
         if provider == "openai":
             key = cfg.get("openai_api_key", "")
+            if not key: return None
             model = cfg.get("openai_model", "gpt-4o")
             return OpenAIClient(api_key=key, model_name=model)
         else:
             # Default to Gemini
             key = cfg.get("gemini_api_key", "")
+            if not key: return None
             model = cfg.get("gemini_model", "gemini-1.5-pro")
             return GeminiClient(api_key=key, model_name=model)
 

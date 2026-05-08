@@ -148,9 +148,17 @@ class GlossaryManagerWindow(ctk.CTkToplevel):
         )
         self.btn_add.pack(side="left", padx=(0, 10))
 
+        # Check if AI is available
+        bulk_text = "✨ Bulk Import (AI)"
+        bulk_state = "normal"
+        if self.ai_client is None:
+            bulk_text = "✨ AI (Cần API Key)"
+            bulk_state = "disabled"
+
         self.btn_bulk_import = ctk.CTkButton(
             self.header_frame,
-            text="✨ Bulk Import (AI)",
+            text=bulk_text,
+            state=bulk_state,
             corner_radius=c.CORNER_RADIUS,
             fg_color=c.COLOR_AI,
             font=f_btn,
