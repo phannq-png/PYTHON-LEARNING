@@ -1,3 +1,74 @@
-# TranslateApp
+# TranslatorApp v1.0 🚀
+### Ứng dụng Dịch Tài liệu Chuyên ngành Nhật - Việt (Bảo toàn Định dạng)
 
-Ứng dụng dịch tài liệu chuyên ngành Nhật-Việt.
+**TranslatorApp** là giải pháp phần mềm Desktop mạnh mẽ giúp dịch các tài liệu kỹ thuật, y tế, pháp luật từ tiếng Nhật sang tiếng Việt sử dụng công nghệ AI tiên tiến (Gemini/OpenAI), đồng thời giữ nguyên 100% định dạng gốc của file Microsoft Word.
+
+---
+
+## ✨ Tính năng Nổi bật
+
+### 🧠 Trí tuệ Nhân tạo (AI-Powered)
+- **Dịch thuật Thông minh**: Tích hợp Google Gemini và OpenAI để dịch sát nghĩa chuyên ngành, ngữ pháp tự nhiên.
+- **Phát hiện Lĩnh vực**: Tự động phân tích nội dung tài liệu để gợi ý bộ thuật ngữ phù hợp ngay khi upload.
+- **Dịch Thuật ngữ Hàng loạt**: Tự động dịch hàng trăm thuật ngữ mới chỉ với một cú click.
+
+### 📄 Xử lý Tài liệu Nâng cao
+- **Bảo toàn Định dạng**: Giữ nguyên Font chữ, màu sắc, kích thước, in đậm/nghiêng, cấu trúc bảng và danh sách (bullets/numbering).
+- **Phân đoạn Thông minh**: Tự động tách trang và đoạn văn bản hợp lý dựa trên cấu hình tùy chỉnh.
+- **Export DOCX**: Hỗ trợ xuất file dịch tiêu chuẩn (tiếng Việt) hoặc phiên bản song ngữ (Nhật-Việt xen kẽ).
+
+### 📖 Quản lý Thuật ngữ (Glossary)
+- **Hệ thống Domain**: Phân chia thuật ngữ theo lĩnh vực (Medical, IT, Legal, Common...).
+- **Cửa sổ Quản lý**: Giao diện CRUD trực quan, hỗ trợ Import/Export CSV tương thích hoàn toàn với Excel.
+- **Interactive Sidebar**: Hiển thị thuật ngữ active trong trang, click để highlight và nhảy đến vị trí trong văn bản gốc.
+
+---
+
+## 🛠️ Công nghệ Sử dụng
+- **Ngôn ngữ**: Python 3.10+
+- **Giao diện**: CustomTkinter (Modern Dark Mode)
+- **Xử lý DOCX**: python-docx
+- **AI Clients**: Google Generative AI, OpenAI API
+- **Bảo mật**: Mã hóa Fernet cho API Keys.
+
+---
+
+## 🚀 Hướng dẫn Cài đặt
+
+1. **Clone repository**:
+   ```bash
+   git clone [repository-url]
+   cd 03_TranslateApp
+   ```
+
+2. **Cài đặt phụ thuộc**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Chạy ứng dụng**:
+   ```bash
+   python main.py
+   ```
+
+---
+
+## 📖 Hướng dẫn Sử dụng Nhanh
+
+1. **Cấu hình API**: Vào `Settings` -> `API Settings` để nhập API Key (Gemini hoặc OpenAI).
+2. **Nạp Tài liệu**: Nhấn `Mở tài liệu` để chọn file `.docx`. AI sẽ tự động gợi ý lĩnh vực.
+3. **Quản lý Thuật ngữ**: Vào `Tools` -> `Quản lý thuật ngữ` để chuẩn bị bộ từ điển chuyên ngành.
+4. **Dịch**: Sử dụng nút `⚡ Translate` để dịch từng trang.
+5. **Kiểm tra**: Sử dụng `✅ Check Page` để đảm bảo thuật ngữ được dùng nhất quán.
+6. **Xuất file**: Nhấn `Export DOCX` để nhận kết quả cuối cùng.
+
+---
+
+## 📝 Tài liệu Dự án
+- [Đặc tả Yêu cầu (Specs)](docs/requirements/REQUIREMENTS_VI.md)
+- [Báo cáo Tiến độ](docs/requirements/PROJECT_STATUS_REPORT.md)
+- [Kịch bản Kiểm thử](docs/requirements/MANUAL_TEST_SCENARIOS.md)
+
+---
+**Phát triển bởi Antigravity Agent.**
+*Chúc bạn có những bản dịch chất lượng nhất!*
