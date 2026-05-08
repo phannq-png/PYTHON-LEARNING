@@ -31,9 +31,24 @@ class ApiSettingsDialog(ctk.CTkToplevel):
         self._load_current_config()
 
     def _build_ui(self):
+        # ── Active Provider Selection ──────────────────────────────────────
+        self.provider_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.provider_frame.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="ew")
+        
+        ctk.CTkLabel(self.provider_frame, text="Dịch vụ AI ưu tiên:", font=ctk.CTkFont(weight="bold")).pack(side="left", padx=10)
+        
+        self.active_provider_var = tk.StringVar(value="gemini")
+        self.seg_provider = ctk.CTkSegmentedButton(
+            self.provider_frame, 
+            values=["gemini", "openai"], 
+            variable=self.active_provider_var,
+            corner_radius=c.CORNER_RADIUS
+        )
+        self.seg_provider.pack(side="left", padx=10)
+
         # ── Tabview for Providers ──────────────────────────────────────────
         self.tabview = ctk.CTkTabview(self, corner_radius=c.CORNER_RADIUS)
-        self.tabview.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.tabview.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
         
         self.tabview.add("Google Gemini")
         self.tabview.add("OpenAI")
@@ -101,7 +116,8 @@ class ApiSettingsDialog(ctk.CTkToplevel):
         """Populate fields with existing encrypted config."""
         config = self.config_manager.load_api_config()
         
-        # We assume the config structure stores by provider name or flat
+        self.active_provider_var.set(config.get("active_provider", "gemini"))
+        
         self.ent_gemini_key.insert(0, config.get("gemini_api_key", ""))
         self.cmb_gemini_model.set(config.get("gemini_model", "gemini-1.5-pro"))
         
@@ -111,6 +127,7 @@ class ApiSettingsDialog(ctk.CTkToplevel):
     def _handle_save(self):
         """Encrypt and save the new configuration."""
         new_config = {
+            "active_provider": self.active_provider_var.get(),
             "gemini_api_key": self.ent_gemini_key.get().strip(),
             "gemini_model": self.cmb_gemini_model.get(),
             "openai_api_key": self.ent_openai_key.get().strip(),

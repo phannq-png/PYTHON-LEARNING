@@ -17,6 +17,8 @@ from src.core.checker import ConsistencyChecker
 from src.core.docx_exporter import DocxExporter
 from src.core.token_tracker import TokenTracker
 from src.services.gemini_client import GeminiClient
+from src.services.openai_client import OpenAIClient
+from src.services.base_client import BaseAIClient
 from src.utils.logger import setup_logger, get_logger
 from src.utils import constants as c
 
@@ -267,11 +269,20 @@ class AppWindow(ctk.CTk):
 
     # ── Helper Utils ───────────────────────────────────────────────────────
 
-    def _get_ai_client(self) -> GeminiClient:
+    def _get_ai_client(self) -> BaseAIClient:
+        """Initialize and return the active AI client from configuration."""
         cfg = self.config_manager.load_api_config()
-        key = cfg.get("gemini_api_key", "")
-        model = cfg.get("gemini_model", "gemini-1.5-pro")
-        return GeminiClient(api_key=key, model_name=model)
+        provider = cfg.get("active_provider", "gemini")
+        
+        if provider == "openai":
+            key = cfg.get("openai_api_key", "")
+            model = cfg.get("openai_model", "gpt-4o")
+            return OpenAIClient(api_key=key, model_name=model)
+        else:
+            # Default to Gemini
+            key = cfg.get("gemini_api_key", "")
+            model = cfg.get("gemini_model", "gemini-1.5-pro")
+            return GeminiClient(api_key=key, model_name=model)
 
     def _get_merged_glossary(self) -> Dict[str, str]:
         common = GlossaryRepository("common").get_terms().copy()

@@ -23,14 +23,19 @@ class GeminiClient(BaseAIClient):
         self.client = genai.Client(api_key=self.api_key)
 
     def translate(self, text: str, glossary: Optional[Dict[str, str]] = None) -> Tuple[str, int]:
-        """Translate Japanese text to Vietnamese with glossary enforcement."""
-        prompt = "Bạn là một dịch giả chuyên nghiệp Nhật-Việt.\n"
+        """Translate Japanese text to Vietnamese with strict marker preservation."""
+        prompt = (
+            "Bạn là một dịch giả chuyên nghiệp Nhật-Việt.\n"
+            "QUY TẮC QUAN TRỌNG:\n"
+            "1. GIỮ NGUYÊN các dấu ngoặc 【】 và nội dung bên trong nếu chúng xuất hiện.\n"
+            "2. Sử dụng ngữ pháp tiếng Việt tự nhiên.\n"
+        )
         if glossary:
-            prompt += "Hãy sử dụng các thuật ngữ sau đây một cách nhất quán:\n"
+            prompt += "\nHãy sử dụng các thuật ngữ sau đây một cách nhất quán:\n"
             for jp, vn in glossary.items():
                 prompt += f"- {jp}: {vn}\n"
         
-        prompt += f"\nDịch văn bản sau sang tiếng Việt, giữ nguyên ngữ pháp tự nhiên:\n\n{text}"
+        prompt += f"\nDịch văn bản sau sang tiếng Việt:\n\n{text}"
         
         try:
             response = self.client.models.generate_content(
