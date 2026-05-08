@@ -122,12 +122,12 @@ class LeftSidebar(ctk.CTkFrame):
         if self._on_page_selected:
             self._on_page_selected(index)
 
-    def _show_placeholder(self) -> None:
+    def _show_placeholder(self, text: str = "(Trống)") -> None:
         """Show the empty state label."""
         self.lbl_placeholder = ctk.CTkLabel(
             self.scroll_frame,
-            text="(Trống)",
-            font=ctk.CTkFont(size=11),
+            text=text,
+            font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=11),
             text_color=("gray55", "gray50"),
         )
         self.lbl_placeholder.pack(pady=20)
