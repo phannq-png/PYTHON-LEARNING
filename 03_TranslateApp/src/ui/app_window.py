@@ -81,6 +81,9 @@ class AppWindow(ctk.CTk):
         self._configure_window()
         self._build_menu_bar()
         self._build_layout()
+        
+        # ── Startup Logic ──────────────────────────────────────────────────
+        self.after(500, self._check_for_resume_session)
 
     # ── Window configuration ────────────────────────────────────────────────
 
@@ -165,7 +168,9 @@ class AppWindow(ctk.CTk):
         self.bottom_bar = BottomBar(
             self, 
             on_check_page_callback=self._handle_consistency_check,
-            on_translate_callback=self._handle_translate
+            on_translate_callback=self._handle_translate,
+            on_get_prompt_callback=self._handle_get_prompt,
+            on_save_callback=self._handle_save
         )
         self.bottom_bar.grid(row=2, column=0, columnspan=3, sticky="ew")
 
@@ -523,3 +528,79 @@ class AppWindow(ctk.CTk):
             messagebox.showinfo("Thành công", f"Đã export tài liệu thành công tại:\n{output_path}")
         except Exception as e:
             messagebox.showerror("Lỗi", f"Export thất bại: {str(e)}")
+
+    def _handle_save(self) -> None:
+        """Manually save the current session to JSON."""
+        if not self.current_session:
+            return
+            
+        try:
+            # Sync current view
+            self.current_session["pages"][self.current_page_idx]["vn"] = self.center_panel.get_vietnamese_text()
+            self.current_session["current_page"] = self.current_page_idx
+            
+            path = self.session_manager.save_session(self.current_session)
+            self.show_toast(f"Đã lưu tiến độ!")
+        except Exception as e:
+            self.show_error("Lỗi Lưu", "Không thể lưu phiên làm việc.", str(e))
+
+    def _handle_get_prompt(self) -> None:
+        """Generate a translation prompt and copy to clipboard."""
+        if not self.current_session:
+            return
+            
+        jp_text = self.center_panel.get_japanese_text()
+        glossary = self._get_merged_glossary()
+        
+        # Build prompt string
+        prompt = (
+            "Hãy dịch đoạn văn bản tiếng Nhật sau đây sang tiếng Việt.\n"
+            "Yêu cầu:\n"
+            "- Dịch sát nghĩa chuyên ngành.\n"
+            "- Sử dụng ngữ pháp tự nhiên.\n"
+        )
+        
+        if glossary:
+            prompt += "- TUÂN THỦ các thuật ngữ sau:\n"
+            for jp, vn in glossary.items():
+                if jp in jp_text: # Only include terms in current text
+                    prompt += f"  * {jp} -> {vn}\n"
+        
+        prompt += f"\nVĂN BẢN GỐC:\n{jp_text}\n\nBẢN DỊCH TIẾNG VIỆT:"
+        
+        # Copy to clipboard
+        self.clipboard_clear()
+        self.clipboard_append(prompt)
+        
+        messagebox.showinfo(
+            "Lấy Prompt thành công", 
+            "Prompt dịch đã được copy vào clipboard của bạn. "
+            "Bạn có thể dán vào ChatGPT hoặc các công cụ AI khác.",
+            parent=self
+        )
+
+    def _check_for_resume_session(self) -> None:
+        """Check for existing sessions and ask user to resume."""
+        sessions = self.session_manager.list_sessions()
+        if not sessions:
+            return
+            
+        latest = sessions[0]
+        filename = tk.os.path.basename(latest["source_file"])
+        msg = f"Tìm thấy phiên làm việc cũ cho file:\n'{filename}'\n\nBạn có muốn tiếp tục không?"
+        
+        if messagebox.askyesno("Tiếp tục phiên làm việc?", msg, parent=self):
+            try:
+                data = self.session_manager.load_session(latest["id"])
+                self.current_session = data
+                self.current_page_idx = data.get("current_page", 0)
+                
+                # Update UI
+                self.title(f"TranslatorApp — {filename}")
+                self.left_sidebar.populate_pages(len(data["pages"]), self.current_page_idx)
+                self.top_bar.set_selected_domain(data["domain"])
+                self._update_center_panel()
+                
+                self.show_toast("Đã khôi phục phiên làm việc!")
+            except Exception as e:
+                self.show_error("Lỗi Tải", "Không thể khôi phục phiên cũ.", str(e))

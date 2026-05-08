@@ -14,6 +14,8 @@ class BottomBar(ctk.CTkFrame):
         master: ctk.CTk, 
         on_check_page_callback: Optional[Callable[[], None]] = None,
         on_translate_callback: Optional[Callable[[], None]] = None,
+        on_get_prompt_callback: Optional[Callable[[], None]] = None,
+        on_save_callback: Optional[Callable[[], None]] = None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -25,6 +27,8 @@ class BottomBar(ctk.CTkFrame):
         )
         self.on_check_page_callback = on_check_page_callback
         self.on_translate_callback = on_translate_callback
+        self.on_get_prompt_callback = on_get_prompt_callback
+        self.on_save_callback = on_save_callback
         self.pack_propagate(False)
         self._build_widgets()
 
@@ -54,9 +58,9 @@ class BottomBar(ctk.CTkFrame):
         self.buttons: List[ctk.CTkButton] = []
         btn_configs = [
             ("⚡ Translate",    c.COLOR_PRIMARY,  self.on_translate_callback),
-            ("📋 Get Prompt",   "gray",           self._on_get_prompt),
+            ("📋 Get Prompt",   "gray",           self.on_get_prompt_callback),
             ("✅ Check Page",   "gray",           self.on_check_page_callback),
-            ("💾 Save",         c.COLOR_SUCCESS,  self._on_save),
+            ("💾 Save",         c.COLOR_SUCCESS,  self.on_save_callback),
         ]
 
         for label, color, cmd in btn_configs:
