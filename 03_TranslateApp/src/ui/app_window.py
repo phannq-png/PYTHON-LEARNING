@@ -131,6 +131,18 @@ class AppWindow(ctk.CTk):
     # ── Logic ──────────────────────────────────────────────────────────────
 
     def _handle_file_upload(self) -> None:
+        """Process file selection with session-close confirmation."""
+        # Check for active session first (Spec 4.9.4)
+        if self.current_session:
+            msg = "Bạn có một phiên làm việc đang mở. Bạn có muốn LƯU tiến độ hiện tại trước khi mở file mới không?"
+            choice = messagebox.askyesnocancel("Xác nhận thay đổi", msg, parent=self)
+            
+            if choice is True: # Yes, save first
+                self._handle_save()
+            elif choice is None: # Cancel operation
+                return
+            # If False (No), proceed to open without saving
+
         file_path = filedialog.askopenfilename(title="Chọn tài liệu", filetypes=[("Word documents", "*.docx")])
         if not file_path: return
         progress = ProgressWindow(self, title="Đang nạp tài liệu...")
