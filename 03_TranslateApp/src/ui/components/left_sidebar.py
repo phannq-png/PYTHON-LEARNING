@@ -2,15 +2,11 @@
 
 import customtkinter as ctk
 from typing import Callable, Optional, List
+from src.utils import constants as c
 
 
 class LeftSidebar(ctk.CTkFrame):
-    """Left sidebar: displays a scrollable list of page navigation buttons.
-
-    Args:
-        master: Parent widget.
-        on_page_selected: Callback function called with page index when a button is clicked.
-    """
+    """Left sidebar: displays a scrollable list of page navigation buttons."""
 
     def __init__(
         self,
@@ -18,7 +14,13 @@ class LeftSidebar(ctk.CTkFrame):
         on_page_selected: Optional[Callable[[int], None]] = None,
         **kwargs
     ) -> None:
-        super().__init__(master, width=180, fg_color=("gray80", "gray17"), **kwargs)
+        super().__init__(
+            master, 
+            width=200, 
+            fg_color=("gray90", "gray15"), 
+            corner_radius=0, 
+            **kwargs
+        )
         self.pack_propagate(False)
         self.grid_propagate(False)
         
@@ -32,42 +34,32 @@ class LeftSidebar(ctk.CTkFrame):
         """Build the sidebar structure with title and scrollable container."""
         self.lbl_title = ctk.CTkLabel(
             self,
-            text="Danh sách trang",
-            font=ctk.CTkFont(size=12, weight="bold"),
+            text="📄 DANH SÁCH TRANG",
+            font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_BODY, weight="bold"),
             text_color=("gray40", "gray60"),
         )
-        self.lbl_title.pack(pady=(16, 8), padx=8)
+        self.lbl_title.pack(pady=(20, 8), padx=c.PADDING_LARGE)
 
         # Separator line
-        sep = ctk.CTkFrame(self, height=1, fg_color=("gray70", "gray35"))
-        sep.pack(fill="x", padx=12, pady=(0, 8))
+        sep = ctk.CTkFrame(self, height=1, fg_color=("gray70", "gray25"))
+        sep.pack(fill="x", padx=16, pady=(0, 10))
 
         # Scrollable container for buttons
         self.scroll_frame = ctk.CTkScrollableFrame(
             self,
             fg_color="transparent",
+            corner_radius=0,
             label_text="",
         )
         self.scroll_frame.pack(fill="both", expand=True, padx=4, pady=4)
 
         # Initial placeholder
-        self.lbl_placeholder = ctk.CTkLabel(
-            self.scroll_frame,
-            text="(Chưa tải file)",
-            font=ctk.CTkFont(size=11),
-            text_color=("gray55", "gray50"),
-        )
-        self.lbl_placeholder.pack(pady=20)
+        self._show_placeholder("(Chưa tải file)")
 
     # ── Public API ───────────────────────────────────────────────────────────
 
     def populate_pages(self, total_pages: int, current_page_index: int = 0) -> None:
-        """Render the list of page buttons.
-        
-        Args:
-            total_pages: Number of pages to display.
-            current_page_index: The index of the page to highlight initially.
-        """
+        """Render the list of page buttons."""
         # Clear existing buttons and placeholder
         for btn in self._buttons:
             btn.destroy()
@@ -77,7 +69,7 @@ class LeftSidebar(ctk.CTkFrame):
             self.lbl_placeholder.destroy()
 
         if total_pages == 0:
-            self._show_placeholder()
+            self._show_placeholder("(Trống)")
             return
 
         self._current_index = current_page_index
@@ -89,19 +81,20 @@ class LeftSidebar(ctk.CTkFrame):
             btn = ctk.CTkButton(
                 self.scroll_frame,
                 text=f"Trang {i + 1}",
-                font=ctk.CTkFont(size=11),
-                height=32,
+                font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_BODY),
+                height=34,
                 anchor="w",
-                fg_color=("#3B8ED0", "#1F6AA5") if is_active else "transparent",
-                text_color=("gray10", "gray90") if not is_active else "white",
-                hover_color=("#DBDBDB", "#2B2B2B") if not is_active else None,
+                corner_radius=c.CORNER_RADIUS,
+                fg_color=c.COLOR_PRIMARY if is_active else "transparent",
+                text_color="white" if is_active else ("gray10", "gray90"),
+                hover_color=("gray80", "gray25"),
                 command=lambda p=i: self._on_page_clicked(p)
             )
-            btn.pack(fill="x", padx=4, pady=2)
+            btn.pack(fill="x", padx=c.PADDING_STD, pady=2)
             self._buttons.append(btn)
 
     def select_page(self, page_index: int) -> None:
-        """Programmatically highlight a page button without triggering the callback."""
+        """Programmatically highlight a page button."""
         if 0 <= page_index < len(self._buttons):
             # Reset old button
             if 0 <= self._current_index < len(self._buttons):
@@ -113,7 +106,7 @@ class LeftSidebar(ctk.CTkFrame):
             # Highlight new button
             self._current_index = page_index
             self._buttons[page_index].configure(
-                fg_color=("#3B8ED0", "#1F6AA5"),
+                fg_color=c.COLOR_PRIMARY,
                 text_color="white"
             )
 

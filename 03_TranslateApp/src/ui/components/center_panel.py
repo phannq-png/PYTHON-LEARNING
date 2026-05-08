@@ -2,19 +2,11 @@
 
 import customtkinter as ctk
 from typing import Callable, Optional
+from src.utils import constants as c
 
 
 class CenterPanel(ctk.CTkFrame):
-    """Center panel split horizontally into Japanese (top) and Vietnamese (bottom) text areas.
-
-    - Top half: read-only Japanese source text.
-    - Bottom half: editable Vietnamese translation text.
-
-    Args:
-        master: Parent widget.
-        on_vn_changed: Optional callback invoked with the current Vietnamese text
-                       every time the user releases a key in the VN textbox.
-    """
+    """Center panel split horizontally into JP (read-only) and VN (editable)."""
 
     def __init__(
         self,
@@ -27,56 +19,58 @@ class CenterPanel(ctk.CTkFrame):
         self._build_widgets()
 
     def _build_widgets(self) -> None:
-        """Build the split text panel with labels and text areas."""
-        # Allow both rows to expand equally
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(2, weight=1)
+        """Build the card-style text panels with headers."""
         self.columnconfigure(0, weight=1)
+        self.rowconfigure((0, 1), weight=1)
 
-        # ── Japanese panel (top) ────────────────────────────────────────────
-        lbl_jp = ctk.CTkLabel(
-            self,
-            text="🇯🇵  Tiếng Nhật (Gốc)",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            anchor="w",
-        )
-        lbl_jp.grid(row=0, column=0, sticky="ew", padx=8, pady=(8, 2))
+        # ── Japanese Panel (Card) ──────────────────────────────────────────
+        self.jp_card = ctk.CTkFrame(self, corner_radius=c.CORNER_RADIUS, border_width=c.BORDER_WIDTH)
+        self.jp_card.grid(row=0, column=0, sticky="nsew", pady=(0, 4))
+        self.jp_card.grid_columnconfigure(0, weight=1)
+        self.jp_card.grid_rowconfigure(1, weight=1)
+
+        ctk.CTkLabel(
+            self.jp_card, 
+            text="🇯🇵  NGUỒN TIẾNG NHẬT", 
+            font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_SMALL, weight="bold"),
+            text_color=c.COLOR_PRIMARY
+        ).grid(row=0, column=0, sticky="w", padx=12, pady=4)
 
         self.txt_japanese = ctk.CTkTextbox(
-            self,
-            font=ctk.CTkFont(family="Yu Gothic", size=11),
+            self.jp_card,
+            font=ctk.CTkFont(family=c.FONT_FAMILY[2], size=13),
+            fg_color="transparent",
             wrap="word",
-            state="disabled",           # read-only
-            fg_color=("gray90", "gray15"),
+            state="disabled",
+            padx=12,
+            pady=8
         )
-        self.txt_japanese.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 4))
-        self.rowconfigure(1, weight=3)
+        self.txt_japanese.grid(row=1, column=0, sticky="nsew", padx=2, pady=(0, 2))
 
-        # ── Horizontal divider ──────────────────────────────────────────────
-        divider = ctk.CTkFrame(self, height=3, fg_color=("gray60", "gray35"))
-        divider.grid(row=2, column=0, sticky="ew", padx=8, pady=2)
-        self.rowconfigure(2, weight=0)
+        # ── Vietnamese Panel (Card) ────────────────────────────────────────
+        self.vn_card = ctk.CTkFrame(self, corner_radius=c.CORNER_RADIUS, border_width=c.BORDER_WIDTH)
+        self.vn_card.grid(row=1, column=0, sticky="nsew", pady=(4, 0))
+        self.vn_card.grid_columnconfigure(0, weight=1)
+        self.vn_card.grid_rowconfigure(1, weight=1)
 
-        # ── Vietnamese panel (bottom) ───────────────────────────────────────
-        lbl_vn = ctk.CTkLabel(
-            self,
-            text="🇻🇳  Tiếng Việt (Bản dịch)",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            anchor="w",
-        )
-        lbl_vn.grid(row=3, column=0, sticky="ew", padx=8, pady=(4, 2))
+        ctk.CTkLabel(
+            self.vn_card, 
+            text="🇻🇳  BẢN DỊCH TIẾNG VIỆT", 
+            font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_SMALL, weight="bold"),
+            text_color=c.COLOR_SUCCESS
+        ).grid(row=0, column=0, sticky="w", padx=12, pady=4)
 
         self.txt_vietnamese = ctk.CTkTextbox(
-            self,
-            font=ctk.CTkFont(size=11),
+            self.vn_card,
+            font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=13),
+            fg_color="transparent",
             wrap="word",
-            fg_color=("gray95", "gray18"),
+            padx=12,
+            pady=8
         )
-        self.txt_vietnamese.grid(row=4, column=0, sticky="nsew", padx=8, pady=(0, 8))
-        self.rowconfigure(3, weight=0)
-        self.rowconfigure(4, weight=3)
+        self.txt_vietnamese.grid(row=1, column=0, sticky="nsew", padx=2, pady=(0, 2))
 
-        # Bind key-release event on VN textbox to fire the change callback
+        # Bind event
         self.txt_vietnamese.bind("<KeyRelease>", self._on_text_changed)
 
     # ── Event handler ────────────────────────────────────────────────────────
@@ -107,3 +101,34 @@ class CenterPanel(ctk.CTkFrame):
     def set_on_vn_changed(self, callback: Callable[[str], None]) -> None:
         """Register or replace the VN-text-changed callback after construction."""
         self._on_vn_changed = callback
+
+    def highlight_japanese_term(self, term: str) -> None:
+        """Highlight all occurrences of a term in the Japanese textbox and scroll to the first one."""
+        self.clear_highlights()
+        if not term:
+            return
+
+        # Configure highlight tag (Light blue)
+        self.txt_japanese.tag_config("highlight", background="#0078D4", foreground="white")
+
+        start_pos = "1.0"
+        first_match = None
+        
+        while True:
+            start_pos = self.txt_japanese.search(term, start_pos, stopindex="end")
+            if not start_pos:
+                break
+            
+            if first_match is None:
+                first_match = start_pos
+                
+            end_pos = f"{start_pos}+{len(term)}c"
+            self.txt_japanese.tag_add("highlight", start_pos, end_pos)
+            start_pos = end_pos
+
+        if first_match:
+            self.txt_japanese.see(first_match)
+
+    def clear_highlights(self) -> None:
+        """Remove all highlight tags from the Japanese textbox."""
+        self.txt_japanese.tag_remove("highlight", "1.0", "end")
