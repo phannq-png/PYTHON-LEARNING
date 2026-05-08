@@ -1,15 +1,43 @@
-## Thay đổi
-- Cập nhật `.gitignore` để không ignore `src/data/`
-- Tạo `ConfigManager` (P1-CONF-001) với Fernet encryption cho API keys
-- Tạo `SegmentationSettingsDialog` (P1-CONF-002) với UI nhập liệu và gọi `ConfigManager.save_app_config`
-- Tích hợp dialog vào menu `Settings > Segmentation Settings` ở `AppWindow`
-- Viết unit tests cho `ConfigManager`
+# Pull Request: TranslatorApp v1.0 — Full Release 🚀
 
-## Acceptance Criteria
-- [x] AC1: Lưu API Key dạng mã hóa (P1-CONF-001)
-- [x] AC2: Đọc file giải mã được (P1-CONF-001)
-- [x] AC3: Bắt lỗi InvalidToken khi mất secret key
-- [x] AC4: Dialog UI thiết lập phân đoạn mở đúng cách (P1-CONF-002)
-- [x] AC5: Dialog có các thông số max_chars, checkboxes, input custom markers
-- [x] AC6: Validation max_chars phải là số nguyên
-- [x] AC7: Load/Save cấu hình phân đoạn xuống `config.json`
+## 📝 Mô tả
+Bản PR này tích hợp toàn bộ thành quả phát triển của phiên làm việc v1.0 từ nhánh `develop` vào `main`. Ứng dụng đã đạt trạng thái hoàn thiện 100% theo tài liệu đặc tả yêu cầu.
+
+## ✨ Các tính năng chính (Key Features)
+
+### 1. Xử lý Tài liệu & Định dạng
+- Chuyển đổi DOCX sang Markdown với hệ thống metadata bảo toàn định dạng cực kỳ chính xác.
+- Export ngược lại DOCX giữ nguyên Font, Size, Color, Bold, Italic, Tables và Lists.
+- Hỗ trợ chế độ xuất file Tiêu chuẩn và Song ngữ (Nhật-Việt xen kẽ).
+
+### 2. Tích hợp AI (Gemini & OpenAI)
+- Dịch thuật trang hiện tại với cơ chế ép buộc thuật ngữ nghiêm ngặt.
+- Tự động phát hiện lĩnh vực (Domain Detection) ngay khi upload file.
+- Dịch thuật ngữ hàng loạt (Bulk Import) ra định dạng JSON có cấu trúc.
+
+### 3. Quản lý Thuật ngữ (Glossary)
+- Giao diện CRUD đa lĩnh vực (Medical, Legal, IT...).
+- Import/Export CSV tương thích hoàn toàn với Microsoft Excel (UTF-8-SIG).
+- Sidebar tương tác: Tự động quét và highlight thuật ngữ trong văn bản.
+
+### 4. Hệ thống & UX
+- Giao diện Dark Mode hiện đại, 10px bo góc toàn hệ thống.
+- Theo dõi Token tiêu thụ thời gian thực.
+- Hệ thống Logging xoay vòng (10MB) và xử lý lỗi toàn cục.
+- Cơ chế tự động lưu (5 phút/lần) và khôi phục phiên (Resume) khi startup.
+
+## 🛠️ Thay đổi kỹ thuật quan trọng
+- Triển khai kiến trúc 4 lớp (UI, Core, Data, Services) rõ ràng.
+- Sử dụng `customtkinter` cho UI và `python-docx` cho xử lý file.
+- Nâng cấp hệ thống AI lên bộ SDK mới nhất của Google (`google-genai`).
+- Hệ thống hằng số Style tập trung tại `src/utils/constants.py`.
+
+## ✅ Hướng dẫn Kiểm thử (Verification)
+1. Chạy `setup.ps1` để cài đặt môi trường.
+2. Khởi động `python main.py`.
+3. Thực hiện quy trình: Upload -> Detect Domain -> Add Glossary -> Translate -> Check Page -> Export.
+4. Kiểm tra file log tại `data/logs/error.log`.
+
+---
+**Tổng kết: Dự án đạt chất lượng v1.0 Production-Ready.**
+*Được thực hiện bởi đội ngũ Antigravity AI Agents.*
