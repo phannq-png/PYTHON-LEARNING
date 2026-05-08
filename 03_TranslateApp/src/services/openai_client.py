@@ -98,3 +98,12 @@ class OpenAIClient(BaseAIClient):
         except Exception as e:
             logger.error(f"OpenAI domain detection error: {e}")
             return "common"
+
+    def test_connection(self) -> bool:
+        """Verify if OpenAI API key is valid by listing models."""
+        try:
+            self.client.models.list()
+            return True
+        except Exception as e:
+            logger.error(f"OpenAI connection test failed: {e}")
+            return False

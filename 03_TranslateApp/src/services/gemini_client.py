@@ -117,3 +117,12 @@ class GeminiClient(BaseAIClient):
         except Exception as e:
             logger.error(f"Gemini domain detection error: {e}")
             return "common"
+
+    def test_connection(self) -> bool:
+        """Verify if Gemini API key is valid by fetching model info."""
+        try:
+            self.client.models.get(model=self.model_name)
+            return True
+        except Exception as e:
+            logger.error(f"Gemini connection test failed: {e}")
+            return False

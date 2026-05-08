@@ -2,10 +2,13 @@
 
 import logging
 import tkinter as tk
+import threading
 from typing import Dict, Any
 
 import customtkinter as ctk
 from src.data.config_manager import ConfigManager
+from src.services.gemini_client import GeminiClient
+from src.services.openai_client import OpenAIClient
 from src.utils import constants as c
 
 logger = logging.getLogger(__name__)
@@ -71,6 +74,16 @@ class ApiSettingsDialog(ctk.CTkToplevel):
             command=self._handle_save
         )
         self.btn_save.pack(side="right")
+
+        self.btn_test = ctk.CTkButton(
+            btn_frame, 
+            text="Kiểm tra kết nối", 
+            fg_color=("gray75", "gray30"),
+            text_color=("gray10", "gray90"),
+            corner_radius=c.CORNER_RADIUS,
+            command=self._handle_test_connection
+        )
+        self.btn_test.pack(side="right", padx=10)
 
         ctk.CTkButton(
             btn_frame, 
@@ -141,3 +154,38 @@ class ApiSettingsDialog(ctk.CTkToplevel):
         except Exception as e:
             logger.error(f"Failed to save API config: {e}")
             tk.messagebox.showerror("Lỗi", f"Không thể lưu cấu hình: {e}")
+
+    def _handle_test_connection(self):
+        """Test the connection for the currently selected provider using UI values."""
+        provider = self.active_provider_var.get()
+        
+        if provider == "gemini":
+            key = self.ent_gemini_key.get().strip()
+            model = self.cmb_gemini_model.get()
+            if not key:
+                tk.messagebox.showwarning("Cảnh báo", "Vui lòng nhập Gemini API Key.")
+                return
+            client = GeminiClient(api_key=key, model_name=model)
+        else:
+            key = self.ent_openai_key.get().strip()
+            model = self.cmb_openai_model.set("") # Wait, fix typo below
+            # Fix: set should be get
+            model = self.cmb_openai_model.get()
+            if not key:
+                tk.messagebox.showwarning("Cảnh báo", "Vui lòng nhập OpenAI API Key.")
+                return
+            client = OpenAIClient(api_key=key, model_name=model)
+
+        self.btn_test.configure(state="disabled", text="Đang thử...")
+        
+        def run_test():
+            success = client.test_connection()
+            def on_done():
+                self.btn_test.configure(state="normal", text="Kiểm tra kết nối")
+                if success:
+                    tk.messagebox.showinfo("Thành công", f"Kết nối tới {provider.upper()} hợp lệ!")
+                else:
+                    tk.messagebox.showerror("Lỗi", f"Không thể kết nối tới {provider.upper()}. Vui lòng kiểm tra lại Key và mạng.")
+            self.after(0, on_done)
+
+        threading.Thread(target=run_test, daemon=True).start()

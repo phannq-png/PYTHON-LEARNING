@@ -21,3 +21,8 @@ class BaseAIClient(ABC):
     def detect_domain(self, text: str) -> str:
         """Analyze text and suggest a domain name."""
         pass
+
+    @abstractmethod
+    def test_connection(self) -> bool:
+        """Verify if the API key and connection are valid."""
+        pass
