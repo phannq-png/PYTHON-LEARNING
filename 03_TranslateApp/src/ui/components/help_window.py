@@ -53,7 +53,7 @@ class UserGuideWindow(ctk.CTkToplevel):
     def _fill_content(self):
         guide_text = """
 1. GIỚI THIỆU
-Ứng dụng hỗ trợ dịch thuật tài liệu DOCX chuyên ngành Nhật-Việt, tích hợp AI (Gemini/OpenAI) và quản lý thuật ngữ thông minh.
+Ứng dụng hỗ trợ dịch thuật tài liệu DOCX chuyên ngành Nhật-Việt (Phiên bản v1.1), tích hợp AI (Gemini/OpenAI) và quản lý thuật ngữ thông minh.
 
 2. CÁC BƯỚC CƠ BẢN
 • Nạp file: Chọn 'File' -> 'Mở file DOCX...' hoặc nút 'Upload' ở TopBar.

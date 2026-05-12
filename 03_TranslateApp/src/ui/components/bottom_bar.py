@@ -64,9 +64,9 @@ class BottomBar(ctk.CTkFrame):
         btn_configs = [
             ("⚡ Translate",     c.COLOR_PRIMARY,  self.on_translate_callback, "Dịch trang hiện tại"),
             ("✨ Translate All",  c.COLOR_AI,       self.on_translate_all_callback, "Dịch tất cả các trang chưa dịch"),
-            ("📋 Get Prompt",    "gray",           self.on_get_prompt_callback, "Sao chép prompt dịch"),
-            ("✅ Check Page",    "gray",           self.on_check_page_callback, "Kiểm tra thuật ngữ trang này"),
-            ("✔️ Check All",     "gray",           self.on_check_all_callback, "Kiểm tra thuật ngữ tất cả các trang"),
+            ("📋 Get Prompt",    c.COLOR_WARNING,  self.on_get_prompt_callback, "Sao chép prompt dịch"),
+            ("✅ Check Page",    "#2980B9",        self.on_check_page_callback, "Kiểm tra thuật ngữ trang này"),
+            ("✔️ Check All",     "#16A085",        self.on_check_all_callback, "Kiểm tra thuật ngữ tất cả các trang"),
             ("💾 Save",          c.COLOR_SUCCESS,  self.on_save_callback, "Lưu tiến độ"),
         ]
 

@@ -1,4 +1,4 @@
-"""Main application window for the TranslatorApp (v1.0 Final)."""
+"""Main application window for the TranslatorApp (v1.1)."""
 
 import tkinter as tk
 import os
@@ -36,6 +36,7 @@ from src.ui.components.left_sidebar import LeftSidebar
 from src.ui.components.right_sidebar import RightSidebar
 from src.ui.components.top_bar import TopBar
 from src.ui.components.help_window import UserGuideWindow
+from src.ui.components.about_window import AboutWindow
 from src.ui.term_manager import GlossaryManagerWindow
 
 
@@ -157,7 +158,7 @@ class AppWindow(ctk.CTk):
                 self.destroy()
 
     def _configure_window(self) -> None:
-        self.title("TranslatorApp — Dịch tài liệu chuyên ngành Nhật-Việt")
+        self.title("TranslatorApp v1.1 — Dịch tài liệu chuyên ngành Nhật-Việt")
         self.minsize(self._MIN_WIDTH, self._MIN_HEIGHT)
         # Start in maximized mode on Windows
         self.state("zoomed")
@@ -838,7 +839,8 @@ class AppWindow(ctk.CTk):
         else: self.seg_dialog.focus()
 
     def _menu_help_about(self):
-        messagebox.showinfo("About", "TranslatorApp v1.0\nAntigravity Agent Edition", parent=self)
+        """Open the professional about window."""
+        AboutWindow(self)
 
     def _open_user_guide(self):
         """Open the detailed user guide window."""

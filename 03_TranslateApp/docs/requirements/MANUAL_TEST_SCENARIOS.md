@@ -123,39 +123,38 @@ Tài liệu này hướng dẫn chi tiết các bước kiểm thử thủ công
 
 ---
 ---
+## 8. Kiểm thử các Nâng cấp v1.1 (Section 4.1, 4.2, 4.3, 4.14)
 
-## 7. Kiểm thử các Nâng cấp v1.2 (Section 4.11, 4.12, 6.4)
-
-### TS-V12-01: Sao lưu và Khôi phục (Backup/Restore)
-- **Mục tiêu**: Kiểm tra tính toàn vẹn của dữ liệu sau khi backup và restore.
+### TS-V11-01: Thu gọn/Mở rộng Chú thích (Legend Toggle)
+- **Mục tiêu**: Kiểm tra tính năng tiết kiệm diện tích Sidebar.
 - **Các bước**:
-    1. Thêm 1-2 thuật ngữ mới.
-    2. Nhấn "Settings" -> "Export All Settings...", lưu file `backup.zip`.
-    3. Xóa các thuật ngữ vừa thêm.
-    4. Nhấn "Settings" -> "Import All Settings...", chọn file `backup.zip`.
-- **Kết quả mong đợi**: Toàn bộ thuật ngữ đã xóa được khôi phục đầy đủ.
+    1. Quan sát phần "CHÚ THÍCH TRẠNG THÁI" ở dưới cùng Sidebar trái.
+    2. Nhấn nút 🔼.
+    3. Nhấn nút 🔽.
+- **Kết quả mong đợi**: Nội dung chú thích biến mất/hiện lại mượt mà, danh sách trang tự động giãn nở.
 
-### TS-V12-02: Tùy chọn hiển thị (Preferences)
-- **Mục tiêu**: Kiểm tra Light/Dark mode và tính độc lập với backup.
+### TS-V11-02: Tìm kiếm Toàn cục (Global Search)
+- **Mục tiêu**: Kiểm tra tính chính xác của highlight tìm kiếm.
 - **Các bước**:
-    1. Nhấn "Settings" -> "Preferences", chọn "Light". Quan sát giao diện đổi màu.
-    2. Thực hiện "Import All Settings" từ một bản backup trước đó (có thể là Dark mode).
-- **Kết quả mong đợi**: Giao diện vẫn giữ nguyên "Light mode", không bị ghi đè bởi bản backup hệ thống.
+    1. Nhập từ khóa (ví dụ: "システム") vào ô tìm kiếm ở TopBar, nhấn Enter.
+    2. Quan sát màu nền các trang ở Sidebar và text ở khung Nguồn.
+    3. Nhấn nút ✕ ở TopBar hoặc phím `Esc`.
+- **Kết quả mong đợi**: Các trang chứa từ khóa đổi sang màu Vàng tươi. Text được highlight Vàng. Xóa highlight hoạt động tức thì.
 
-### TS-V12-03: Quản lý Lĩnh vực (Domain Manager)
-- **Mục tiêu**: Kiểm tra các ràng buộc an toàn của chuyên ngành.
+### TS-V11-03: Duy trì Trạng thái Lỗi (Persistence)
+- **Mục tiêu**: Đảm bảo kết quả Check Page không bị mất khi lật trang.
 - **Các bước**:
-    1. Mở "Tools" -> "Quản lý lĩnh vực".
-    2. Thử nhấn nút Xóa hoặc Sửa tại lĩnh vực `common`.
-    3. Thêm lĩnh vực `TestDomain`, sau đó xóa nó.
-- **Kết quả mong đợi**: Nút tại `common` bị vô hiệu hóa. Các lĩnh vực khác thêm/sửa/xóa bình thường.
+    1. Thực hiện Check Page ở Trang 1 (phát hiện lỗi, Sidebar hiện dấu X đỏ).
+    2. Chuyển sang Trang 2.
+    3. Quay lại Trang 1.
+- **Kết quả mong đợi**: Dấu X đỏ và danh sách lỗi ở Sidebar phải được giữ nguyên mà không cần nhấn Check lại.
 
-### TS-V12-04: Tooltip và Context Menu
-- **Mục tiêu**: Kiểm tra trải nghiệm người dùng mới.
+### TS-V11-04: Hướng dẫn sử dụng & Màu sắc UI
+- **Mục tiêu**: Kiểm tra tính khả dụng của Help Window và độ tương phản màu sắc.
 - **Các bước**:
-    1. Di chuột qua nút "Translate" và giữ 1 giây.
-    2. Bôi đen một từ tiếng Nhật trong khung Nguồn, chuột phải chọn "Add to Glossary".
-- **Kết quả mong đợi**: Tooltip hiện lên giải thích chức năng. Dialog thêm thuật ngữ nhanh hiện ra với từ đã chọn.
+    1. Vào menu `Help` -> `Hướng dẫn sử dụng`.
+    2. Kiểm tra màu sắc các nút `Check Page`, `Get Prompt` ở BottomBar.
+- **Kết quả mong đợi**: Cửa sổ hướng dẫn hiện ở chính giữa màn hình. Các nút bấm có màu Cam/Xanh nổi bật, dễ nhìn.
 
 ---
-*Tài liệu được cập nhật bởi Agent BA.*
+*Tài liệu được cập nhật bởi Antigravity (Developer Agent) - Phiên bản v1.1.*

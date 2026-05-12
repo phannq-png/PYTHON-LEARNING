@@ -18,7 +18,7 @@ def main() -> None:
         ctk.set_default_color_theme("blue")
 
         # 3. Launch Application
-        logger.info("Starting TranslatorApp v1.0...")
+        logger.info("Starting TranslatorApp v1.1...")
         app = AppWindow()
         app.mainloop()
         logger.info("Application closed normally.")
