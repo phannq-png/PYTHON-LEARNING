@@ -8,10 +8,10 @@
 
 | Chỉ số | Trạng thái | Ghi chú |
 |---|---|---|
-| **Tổng số Feature** | 24 | Đã hoàn thành các cải tiến UI/UX v1.1. |
-| **Phase hiện tại** | Bảo trì & Nâng cấp | **Phiên bản 1.1 đã hoàn thành.** |
-| **Tiến độ Task** | 100% | (Toàn bộ tasks v1.1) |
-| **Backlog Quality** | 100% | Đã cập nhật spec và README v1.1. |
+| **Tổng số Feature** | 25 | Đã hoàn thành hệ thống Daily Logging. |
+| **Phase hiện tại** | Bảo trì & Nâng cấp | **Phiên bản 1.1.1 phát hành.** |
+| **Tiến độ Task** | 100% | (Toàn bộ tasks v1.1.1) |
+| **Backlog Quality** | 100% | Đã cập nhật spec và README v1.1.1. |
 
 ---
 
@@ -27,13 +27,13 @@
 - [x] Tài liệu Spec song ngữ (VI/EN) chính xác 100%.
 - [x] Hệ thống Backlog chi tiết cho mọi feature.
 - [x] Kịch bản kiểm thử thủ công (`MANUAL_TEST_SCENARIOS.md`).
-- [x] Hệ thống Logging và Xử lý lỗi bền bỉ.
-- [x] **Nâng cấp v1.1 (2026-05-12)**:
+- [x] **Nâng cấp v1.1.1 (2026-05-12)**:
+    - **Daily Logging**: Hệ thống log quay vòng theo ngày với tiền tố `yyyyMMdd`.
+    - **API Logger**: Tách riêng log Prompt/Response vào file `api.log` để bảo mật và tra cứu.
+    - **Bugfix (UI)**: Sửa lỗi treo giao diện (freeze) khi AI không nhận diện được lĩnh vực.
     - **Persistence**: Duy trì trạng thái lỗi thuật ngữ (Dấu X đỏ) khi chuyển trang.
-    - **Highlight System**: Cơ chế Click-to-Toggle cho thuật ngữ và màu sắc phân biệt với tìm kiếm.
-    - **UI Optimization**: Sidebar Legend có thể thu gọn; Cửa sổ Hướng dẫn sử dụng (Help) tích hợp sẵn.
-    - **Visual Polish**: Màu sắc các nút hành động (Check, Get Prompt) tương phản cao, dễ nhìn.
-    - **Documentation**: Đồng bộ README và Specs lên v1.1.
+    - **Highlight System**: Cơ chế Click-to-Toggle cho thuật ngữ.
+    - **UI Optimization**: Sidebar Legend có thể thu gọn.
 
 ---
 

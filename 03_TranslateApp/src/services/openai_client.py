@@ -7,7 +7,10 @@ from typing import Dict, List, Optional, Tuple
 from openai import OpenAI
 from src.services.base_client import BaseAIClient
 
-logger = logging.getLogger(__name__)
+from src.utils.logger import setup_logger, get_logger
+
+logger = get_logger(__name__)
+api_logger = get_logger("api")
 
 
 class OpenAIClient(BaseAIClient):
@@ -51,6 +54,7 @@ class OpenAIClient(BaseAIClient):
         )
         
         try:
+            api_logger.info(f"--- OPENAI REQUEST (translate) ---\nDOMAIN: {domain_str}\nSYSTEM:\n{system_prompt}\nUSER:\n{user_prompt}\n--- END REQUEST ---")
             response = self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[
@@ -59,6 +63,8 @@ class OpenAIClient(BaseAIClient):
                 ],
                 temperature=0.3
             )
+            res_text = response.choices[0].message.content.strip()
+            api_logger.info(f"--- OPENAI RESPONSE (translate) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
             translated_text = response.choices[0].message.content.strip()
             # Remove the index prefix [1] if the model mistakenly includes it in the output
             import re
@@ -108,11 +114,14 @@ class OpenAIClient(BaseAIClient):
         )
 
         try:
+            api_logger.info(f"--- OPENAI REQUEST (translate_batch) ---\nDOMAIN: {domain_str}\nPROMPT:\n{prompt}\n--- END REQUEST ---")
             response = self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
                 response_format={"type": "json_object"}
             )
+            res_text = response.choices[0].message.content.strip()
+            api_logger.info(f"--- OPENAI RESPONSE (translate_batch) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
             
             data = json.loads(response.choices[0].message.content)
             result = {item["jp"]: item["vn"] for item in data.get("terms", [])}
@@ -141,11 +150,14 @@ class OpenAIClient(BaseAIClient):
         )
         
         try:
+            api_logger.info(f"--- OPENAI REQUEST (detect_domain) ---\nPROMPT:\n{prompt}\n--- END REQUEST ---")
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.choices[0].message.content.strip()
+            res_text = response.choices[0].message.content.strip()
+            api_logger.info(f"--- OPENAI RESPONSE (detect_domain) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
+            return res_text
         except Exception as e:
             logger.error(f"OpenAI domain detection error: {e}")
             return "common"

@@ -576,6 +576,20 @@ Khi người dùng bôi đen văn bản và click chuột phải tại ô Nguồ
 
 ---
 
+### 4.15 Hệ thống Nhật ký hoạt động (Logging System)
+
+#### 4.15.1 Cơ chế Lưu trữ
+- **Đường dẫn**: Toàn bộ log được lưu tại thư mục `data/logs/`.
+- **Tiền tố ngày**: Tất cả các file log được bắt đầu bằng tiền tố `yyyyMMdd` (ví dụ: `20260512_app.log`).
+- **Quay vòng hàng ngày (Daily Rotation)**: Hệ thống tự động tạo file log mới khi sang ngày mới. Các file log cũ được giữ lại trong vòng 7 ngày gần nhất.
+
+#### 4.15.2 Phân loại Log
+- **App Log (`_app.log`)**: Ghi lại toàn bộ luồng hoạt động của ứng dụng (mức DEBUG).
+- **Error Log (`_error.log`)**: Chỉ ghi lại các lỗi nghiêm trọng (mức ERROR) để phục vụ bảo trì.
+- **API Log (`_api.log`)**: Tách riêng toàn bộ nội dung yêu cầu (Prompt) và kết quả trả về từ các dịch vụ AI (Gemini, OpenAI). Log này không được gửi sang App Log để đảm bảo tính riêng tư và dễ tra cứu.
+
+---
+
 ### 4.11 Sao lưu và Khôi phục (Backup & Restore)
 Hệ thống cho phép người dùng đóng gói và khôi phục toàn bộ dữ liệu làm việc:
 - **Export All Settings**: Đóng gói toàn bộ cấu hình (`api_config.json`, các file `.json` trong `glossaries/`, các file `.key`) vào một file nén `.zip`.

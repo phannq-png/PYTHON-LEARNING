@@ -10,7 +10,10 @@ from google.genai import types
 
 from src.services.base_client import BaseAIClient
 
-logger = logging.getLogger(__name__)
+from src.utils.logger import setup_logger, get_logger
+
+logger = get_logger(__name__)
+api_logger = get_logger("api")
 
 
 class GeminiClient(BaseAIClient):
@@ -52,10 +55,13 @@ class GeminiClient(BaseAIClient):
         )
         
         try:
+            api_logger.info(f"--- GEMINI REQUEST (translate) ---\nDOMAIN: {domain_str}\nPROMPT:\n{prompt}\n--- END REQUEST ---")
             response = self.client.models.generate_content(
                 model=self.model_name,
                 contents=prompt
             )
+            res_text = response.text.strip()
+            api_logger.info(f"--- GEMINI RESPONSE (translate) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
             # Remove the index prefix [1] if the model mistakenly includes it in the output
             translated_text = response.text.strip()
             translated_text = re.sub(r'^\[1\]\s*', '', translated_text)
@@ -108,6 +114,7 @@ class GeminiClient(BaseAIClient):
         )
 
         try:
+            api_logger.info(f"--- GEMINI REQUEST (translate_batch) ---\nDOMAIN: {domain_str}\nPROMPT:\n{prompt}\n--- END REQUEST ---")
             # Use the new structured output support if possible, or simple generation
             response = self.client.models.generate_content(
                 model=self.model_name,
@@ -116,6 +123,8 @@ class GeminiClient(BaseAIClient):
                     response_mime_type="application/json"
                 )
             )
+            res_text = response.text.strip()
+            api_logger.info(f"--- GEMINI RESPONSE (translate_batch) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
             
             raw_text = response.text.strip()
             data = json.loads(raw_text)
@@ -157,11 +166,14 @@ class GeminiClient(BaseAIClient):
         )
         
         try:
+            api_logger.info(f"--- GEMINI REQUEST (detect_domain) ---\nPROMPT:\n{prompt}\n--- END REQUEST ---")
             response = self.client.models.generate_content(
                 model=self.model_name,
                 contents=prompt
             )
-            return response.text.strip()
+            res_text = response.text.strip()
+            api_logger.info(f"--- GEMINI RESPONSE (detect_domain) ---\nRESULT:\n{res_text}\n--- END RESPONSE ---")
+            return res_text
         except Exception as e:
             logger.error(f"Gemini domain detection error: {e}")
             return "common"

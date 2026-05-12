@@ -889,6 +889,7 @@ class AppWindow(ctk.CTk):
             # Refresh UI
             self._refresh_all_domains()
             self._on_glossary_changed()
+            self.state("zoomed") # Restore fullscreen state
         except Exception as e:
             self.show_error("Lỗi Import", f"Không thể khôi phục cấu hình: {e}")
 

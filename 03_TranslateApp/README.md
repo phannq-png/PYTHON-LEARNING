@@ -34,7 +34,10 @@
 - **Giao diện**: CustomTkinter (Modern Dark Mode)
 - **Xử lý DOCX**: python-docx
 - **AI Clients**: Google Generative AI, OpenAI API
-- **Bảo mật**: Mã hóa Fernet cho API Keys.
+### 🛡️ Hệ thống Giám sát & Bảo mật
+- **Daily Logging**: Hệ thống log tự động quay vòng theo ngày với định dạng `yyyyMMdd_app.log`.
+- **API Transparency**: Tách riêng log yêu cầu và phản hồi từ AI vào file `api.log` giúp kiểm soát chi phí và chất lượng dịch thuật.
+- **Mã hóa Fernet**: Bảo vệ API Keys an toàn trong file cấu hình.
 
 ---
 
