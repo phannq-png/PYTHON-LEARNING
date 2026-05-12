@@ -94,6 +94,7 @@ class AppWindow(ctk.CTk):
         self._refresh_all_domains()
         self.after(100, self._perform_startup_api_check)
         self._start_auto_save_timer()
+        self.state("zoomed") # Ensure maximized on start
 
     def _perform_startup_api_check(self):
         """Automatically validate all API keys on startup and re-enable working ones."""
@@ -127,7 +128,6 @@ class AppWindow(ctk.CTk):
 
             def on_done():
                 self.spinner.stop()
-                self.state("zoomed")
                 if active_count == 0:
                     messagebox.showerror("Lỗi Kết nối", "Không có API Key nào hoạt động. Vui lòng kiểm tra lại cấu hình.")
                     self._open_api_settings()
@@ -158,10 +158,8 @@ class AppWindow(ctk.CTk):
                 self.destroy()
 
     def _configure_window(self) -> None:
-        self.title("TranslatorApp v1.1 — Dịch tài liệu chuyên ngành Nhật-Việt")
+        self.title("TranslatorApp v1.2.0 — Dịch tài liệu chuyên ngành Nhật-Việt")
         self.minsize(self._MIN_WIDTH, self._MIN_HEIGHT)
-        # Start in maximized mode on Windows
-        self.state("zoomed")
 
     def _build_menu_bar(self) -> None:
         menubar = tk.Menu(self)

@@ -1,4 +1,4 @@
-# TranslatorApp v1.1 🚀
+# TranslatorApp v1.2.0 🚀
 ### Ứng dụng Dịch Tài liệu Chuyên ngành Nhật - Việt (Bảo toàn Định dạng)
 
 **TranslatorApp** là giải pháp phần mềm Desktop mạnh mẽ giúp dịch các tài liệu kỹ thuật, y tế, pháp luật từ tiếng Nhật sang tiếng Việt sử dụng công nghệ AI tiên tiến (Gemini/OpenAI), đồng thời giữ nguyên 100% định dạng gốc của file Microsoft Word.

@@ -19,24 +19,24 @@ def build():
         "--onefile",
         "--name", "TranslatorApp",
         "--add-data", f"{ctk_path}{os.pathsep}customtkinter",
-        "--add-data", f"src{os.pathsep}src",
+        "--add-data", f"src/assets{os.pathsep}src/assets",
         "main.py"
     ]
     
-    print("--- STARTING CLEAN BUILD (v1.1) ---")
+    print("--- STARTING CLEAN BUILD (v1.2.0) ---")
     print(f"CustomTkinter path: {ctk_path}")
     print(f"Command: {' '.join(cmd)}")
     print("-----------------------------------")
     
     try:
         subprocess.check_call(cmd)
-        print("\n✅ BUILD SUCCESSFUL!")
-        print("Your executable is located in the 'dist' folder.")
+        print("\nBUILD SUCCESSFUL!")
+        print(f"Executable is located in: {os.path.abspath('dist')}")
     except subprocess.CalledProcessError as e:
-        print(f"\n❌ BUILD FAILED: {e}")
+        print(f"\nBUILD FAILED: {e}")
         print("Make sure you have installed pyinstaller: pip install pyinstaller")
     except FileNotFoundError:
-        print("\n❌ ERROR: pyinstaller not found.")
+        print("\nERROR: pyinstaller not found.")
         print("Please run: pip install pyinstaller")
 
 if __name__ == "__main__":

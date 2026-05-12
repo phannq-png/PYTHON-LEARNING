@@ -53,7 +53,7 @@ class AboutWindow(ctk.CTkToplevel):
         
         lbl_version = ctk.CTkLabel(
             header_frame,
-            text="Phiên bản v1.1.0",
+            text="Phiên bản v1.2.0",
             font=ctk.CTkFont(size=12),
             text_color="gray50"
         )

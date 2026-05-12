@@ -1,4 +1,4 @@
-# TÀI LIỆU ĐẶC TẢ YÊU CẦU (Phiên bản v1.1)
+# TÀI LIỆU ĐẶC TẢ YÊU CẦU (Phiên bản v1.2.0)
 ## Ứng dụng Dịch Tài liệu Chuyên ngành Nhật-Việt
 
 ---

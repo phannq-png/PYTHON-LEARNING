@@ -3,7 +3,9 @@
 import customtkinter as ctk
 from PIL import Image
 import os
+from PIL import Image
 from src.utils import constants as c
+from src.utils.path_utils import get_resource_path
 
 class LoadingSpinner(ctk.CTkToplevel):
     """A rotating spinner component inside a centered Toplevel window."""
@@ -11,7 +13,7 @@ class LoadingSpinner(ctk.CTkToplevel):
     def __init__(
         self, 
         master, 
-        image_path="src/assets/spinner.png", 
+        image_path=None, 
         size=(48, 48), 
         speed_ms=80,
         text="Đang xử lý...",
@@ -19,6 +21,9 @@ class LoadingSpinner(ctk.CTkToplevel):
     ):
         super().__init__(master, **kwargs)
         self.master_window = master
+        
+        if image_path is None:
+            image_path = get_resource_path("src/assets/spinner.png")
         
         # ── Window Properties ──────────────────────────────────────────────
         self.title("Processing")
