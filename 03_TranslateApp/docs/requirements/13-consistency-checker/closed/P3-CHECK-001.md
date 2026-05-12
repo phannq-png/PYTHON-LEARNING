@@ -6,7 +6,7 @@
 - **Phase**: 3
 - **Estimated Effort**: M
 - **Dependencies**: P2-GLOS-001, P2-UI-002
-- **Status**: opening
+- **Status**: closed
 
 ## Mô tả
 
@@ -15,15 +15,16 @@ Xây dựng chức năng cho phép người dùng kiểm tra tính nhất quán 
 
 ### Phạm vi
 **Làm:**
-- [ ] Tạo một class `ConsistencyChecker`.
-- [ ] Method `check(jp_text, vn_text, glossary)` sẽ là hạt nhân xử lý.
-- [ ] Implement thuật toán xác thực:
+- [x] Tạo một class `ConsistencyChecker`.
+- [x] Method `check(jp_text, vn_text, glossary)` sẽ là hạt nhân xử lý.
+- [x] Implement thuật toán xác thực:
     1. Đếm số lần xuất hiện của mỗi thuật ngữ trong `jp_text` (phân biệt full-width/half-width).
     2. Đếm số lần xuất hiện của bản dịch tương ứng trong `vn_text` (KHÔNG phân biệt chữ hoa/thường).
     3. So sánh hai số đếm và ghi lại các trường hợp không khớp.
-- [ ] Tích hợp vào UI: Nút "Check Page" trên `BottomBar` sẽ trigger việc kiểm tra.
-- [ ] Tạo một cửa sổ dialog `CheckResultWindow` để hiển thị kết quả.
-- [ ] Dialog hiển thị thông báo thành công hoặc danh sách các thuật ngữ không khớp (Term JP -> VN, JP count, VN count).
+- [x] Tích hợp vào UI: Nút "Check Page" trên `BottomBar` sẽ trigger việc kiểm tra.
+- [x] Tạo một cửa sổ dialog `CheckResultWindow` để hiển thị kết quả.
+- [x] Dialog hiển thị thông báo thành công hoặc danh sách các thuật ngữ không khớp.
+- [x] Cập nhật danh sách thuật ngữ ở Thanh bên phải: Hiển thị icon `×` (Đỏ) thay cho `✓` nếu thuật ngữ bị sai sau khi check.
 
 **KHÔNG làm:**
 - Tự động sửa các lỗi không nhất quán.

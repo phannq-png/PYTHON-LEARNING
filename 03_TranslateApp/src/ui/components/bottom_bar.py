@@ -4,6 +4,7 @@ from typing import Callable, Optional, List
 
 import customtkinter as ctk
 from src.utils import constants as c
+from src.ui.components.tooltip import add_tooltip
 
 
 class BottomBar(ctk.CTkFrame):
@@ -13,7 +14,9 @@ class BottomBar(ctk.CTkFrame):
         self, 
         master: ctk.CTk, 
         on_check_page_callback: Optional[Callable[[], None]] = None,
+        on_check_all_callback: Optional[Callable[[], None]] = None,
         on_translate_callback: Optional[Callable[[], None]] = None,
+        on_translate_all_callback: Optional[Callable[[], None]] = None,
         on_get_prompt_callback: Optional[Callable[[], None]] = None,
         on_save_callback: Optional[Callable[[], None]] = None,
         **kwargs
@@ -26,7 +29,9 @@ class BottomBar(ctk.CTkFrame):
             **kwargs
         )
         self.on_check_page_callback = on_check_page_callback
+        self.on_check_all_callback = on_check_all_callback
         self.on_translate_callback = on_translate_callback
+        self.on_translate_all_callback = on_translate_all_callback
         self.on_get_prompt_callback = on_get_prompt_callback
         self.on_save_callback = on_save_callback
         self.pack_propagate(False)
@@ -57,19 +62,21 @@ class BottomBar(ctk.CTkFrame):
         # ── Action buttons (left side) ──────────────────────────────────────
         self.buttons: List[ctk.CTkButton] = []
         btn_configs = [
-            ("⚡ Translate",    c.COLOR_PRIMARY,  self.on_translate_callback),
-            ("📋 Get Prompt",   "gray",           self.on_get_prompt_callback),
-            ("✅ Check Page",   "gray",           self.on_check_page_callback),
-            ("💾 Save",         c.COLOR_SUCCESS,  self.on_save_callback),
+            ("⚡ Translate",     c.COLOR_PRIMARY,  self.on_translate_callback, "Dịch trang hiện tại"),
+            ("✨ Translate All",  c.COLOR_AI,       self.on_translate_all_callback, "Dịch tất cả các trang chưa dịch"),
+            ("📋 Get Prompt",    "gray",           self.on_get_prompt_callback, "Sao chép prompt dịch"),
+            ("✅ Check Page",    "gray",           self.on_check_page_callback, "Kiểm tra thuật ngữ trang này"),
+            ("✔️ Check All",     "gray",           self.on_check_all_callback, "Kiểm tra thuật ngữ tất cả các trang"),
+            ("💾 Save",          c.COLOR_SUCCESS,  self.on_save_callback, "Lưu tiến độ"),
         ]
 
-        for label, color, cmd in btn_configs:
+        for label, color, cmd, tooltip_text in btn_configs:
             kwargs: dict = {
                 "text": label, 
-                "width": 140, 
+                "width": 125, # Slightly reduced width to fit 6 buttons
                 "command": cmd,
                 "corner_radius": c.CORNER_RADIUS,
-                "font": ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_BODY)
+                "font": ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_SMALL) # Smaller font
             }
             
             if color == "gray":
@@ -80,6 +87,7 @@ class BottomBar(ctk.CTkFrame):
             
             btn = ctk.CTkButton(self, **kwargs)
             btn.pack(side="left", padx=(c.PADDING_LARGE, 4), pady=c.PADDING_LARGE)
+            add_tooltip(btn, tooltip_text)
             self.buttons.append(btn)
 
         # ── Token counter (right side) ──────────────────────────────────────
@@ -97,6 +105,8 @@ class BottomBar(ctk.CTkFrame):
         """Display the progress bar and status text."""
         self.lbl_status.configure(text=text)
         self.progress_bar.set(0)
+        self.progress_bar.pack(side="top", fill="x")
+
         # Position it in the middle of the frame
         self.progress_frame.place(relx=0.5, rely=0.5, anchor="center")
         self.set_buttons_state("disabled")

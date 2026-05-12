@@ -51,11 +51,13 @@ class CheckResultWindow(ctk.CTkToplevel):
         scroll_frame.grid_columnconfigure((0, 1), weight=2); scroll_frame.grid_columnconfigure((2, 3), weight=1)
 
         f_b = ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_BODY)
+        f_b_bold = ctk.CTkFont(family=c.FONT_FAMILY[0], size=c.FONT_SIZE_BODY, weight="bold")
+        
         for i, m in enumerate(mismatches):
             ctk.CTkLabel(scroll_frame, text=m["jp_term"], font=ctk.CTkFont(family=c.FONT_FAMILY[2], size=c.FONT_SIZE_BODY)).grid(row=i, column=0, sticky="w", padx=5, pady=3)
             ctk.CTkLabel(scroll_frame, text=m["vn_term"], font=f_b).grid(row=i, column=1, sticky="w", padx=5, pady=3)
-            ctk.CTkLabel(scroll_frame, text=str(m["jp_count"]), font=f_b, text_color=c.COLOR_PRIMARY).grid(row=i, column=2, sticky="center", pady=3)
-            ctk.CTkLabel(scroll_frame, text=str(m["vn_count"]), font=f_b, text_color=c.COLOR_DANGER, weight="bold").grid(row=i, column=3, sticky="center", pady=3)
+            ctk.CTkLabel(scroll_frame, text=str(m["jp_count"]), font=f_b, text_color=c.COLOR_PRIMARY).grid(row=i, column=2, sticky="", pady=3)
+            ctk.CTkLabel(scroll_frame, text=str(m["vn_count"]), font=f_b_bold, text_color=c.COLOR_DANGER).grid(row=i, column=3, sticky="", pady=3)
 
     def _build_success_view(self):
         ctk.CTkLabel(

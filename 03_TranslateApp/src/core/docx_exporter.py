@@ -126,8 +126,12 @@ class DocxExporter:
         if fmt.get("font_size"):
             run.font.size = Pt(fmt["font_size"])
         
-        # Apply Vietnamese-friendly font
-        run.font.name = self.default_font
+        # Apply font from metadata if available, otherwise use default
+        original_font = fmt.get("font_name")
+        if original_font:
+            run.font.name = original_font
+        else:
+            run.font.name = self.default_font
         
         if fmt.get("font_color"):
             try:

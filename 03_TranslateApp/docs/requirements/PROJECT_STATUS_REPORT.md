@@ -1,6 +1,6 @@
 # BÁO CÁO TIẾN ĐỘ DỰ ÁN (PROJECT STATUS REPORT)
 ## Dự án: TranslatorApp
-**Ngày cập nhật**: 2026-05-08
+**Ngày cập nhật**: 2026-05-11
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Chỉ số | Trạng thái | Ghi chú |
 |---|---|---|
-| **Tổng số Feature** | 20 | |
-| **Phase hiện tại** | Đã Xong | **Dự án đã hoàn thành 100%.** |
-| **Tiến độ Task** | 100% | (Toàn bộ 20 features đã được triển khai) |
-| **Backlog Quality** | 100% | Toàn bộ task đã được đóng. |
+| **Tổng số Feature** | 21 | Bổ sung Feature Tìm kiếm Văn bản. |
+| **Phase hiện tại** | Bảo trì & Nâng cấp | **Phiên bản 1.3 đã hoàn thành.** |
+| **Tiến độ Task** | 100% | (Toàn bộ tasks v1.3) |
+| **Backlog Quality** | 100% | Đã cập nhật spec và tasks tương ứng. |
 
 ---
 
@@ -28,6 +28,12 @@
 - [x] Hệ thống Backlog chi tiết cho mọi feature.
 - [x] Kịch bản kiểm thử thủ công (`MANUAL_TEST_SCENARIOS.md`).
 - [x] Hệ thống Logging và Xử lý lỗi bền bỉ.
+- [x] **Nâng cấp v1.3 (2026-05-11)**:
+    - **Tìm kiếm Văn bản (Text Search)**: Tìm kiếm tại trang (Highlight vàng) và tìm kiếm toàn bộ (Sidebar highlight).
+    - **Cải tiến Check Consistency**: Hiển thị icon `×` (Đỏ) ở Sidebar cho các thuật ngữ bị lỗi sau khi check.
+    - **Phản hồi Người dùng**: Popup thông báo khi Lưu thủ công thành công.
+    - **Bulk Import Polish**: Cân đối giao diện, tự động căn giữa và lưu trữ Prompt rules theo từng lĩnh vực.
+    - **Cấu hình Agent**: Developer Agent bắt buộc sử dụng skill `caveman` để tối ưu giao tiếp.
 
 ---
 

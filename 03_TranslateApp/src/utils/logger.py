@@ -3,16 +3,16 @@
 import logging
 import os
 import sys
-from logging.handlers import RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 
 def setup_logger(data_dir: str = "data") -> logging.Logger:
-    """Configure and return the root logger with file and console handlers."""
+    """Configure and return the root logger with daily file rotation."""
     log_dir = Path(data_dir) / "logs"
     os.makedirs(log_dir, exist_ok=True)
     
-    log_file = log_dir / "error.log"
+    log_file = log_dir / "app.log" # Rename to app.log as it might contain more than errors now
     
     # Create root logger
     logger = logging.getLogger("TranslatorApp")
@@ -22,26 +22,31 @@ def setup_logger(data_dir: str = "data") -> logging.Logger:
     if logger.handlers:
         return logger
 
-    # 1. Rotating File Handler (Max 10MB, 5 backups)
-    file_handler = RotatingFileHandler(
-        log_file, 
-        maxBytes=10*1024*1024, 
-        backupCount=5, 
-        encoding="utf-8"
+    # 1. Main App Log (Every midnight, keep 7 days, all levels)
+    app_log = log_dir / "app.log"
+    app_handler = TimedRotatingFileHandler(
+        app_log, when="midnight", interval=1, backupCount=7, encoding="utf-8"
     )
-    file_handler.setLevel(logging.ERROR) # Only log errors and above to file
-    file_fmt = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
-    )
-    file_handler.setFormatter(file_fmt)
+    app_handler.setLevel(logging.DEBUG)
+    app_fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s')
+    app_handler.setFormatter(app_fmt)
     
-    # 2. Console Handler (For development)
+    # 2. Error Log (Every midnight, keep 7 days, only ERROR+)
+    error_log = log_dir / "error.log"
+    error_handler = TimedRotatingFileHandler(
+        error_log, when="midnight", interval=1, backupCount=7, encoding="utf-8"
+    )
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(app_fmt)
+    
+    # 3. Console Handler (For development)
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.INFO)
     console_fmt = logging.Formatter('%(levelname)s: %(message)s')
     console_handler.setFormatter(console_fmt)
     
-    logger.addHandler(file_handler)
+    logger.addHandler(app_handler)
+    logger.addHandler(error_handler)
     logger.addHandler(console_handler)
     
     return logger

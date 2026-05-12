@@ -32,7 +32,10 @@ class DocumentProcessor:
         try:
             doc = Document(file_path)
         except Exception as e:
-            raise ValueError(f"Invalid or corrupted DOCX file: {e}")
+            error_str = str(e)
+            if "Package not found" in error_str or "Permission denied" in error_str:
+                raise ValueError("Không thể mở file. Có thể file đang được mở trong một ứng dụng khác (như Word). Vui lòng đóng file và thử lại.")
+            raise ValueError(f"Lỗi nạp file: {error_str}")
 
         texts: List[str] = []
         metadata: List[Dict[str, Any]] = []
@@ -164,4 +167,9 @@ class DocumentProcessor:
                     # Fallback if color string is invalid
                     pass
                 
-        doc.save(output_path)
+        try:
+            doc.save(output_path)
+        except Exception as e:
+            if "Permission denied" in str(e) or "PermissionError" in str(e):
+                raise ValueError(f"Không thể lưu file vào '{output_path}'. Vui lòng đóng file nếu nó đang được mở và thử lại.")
+            raise e

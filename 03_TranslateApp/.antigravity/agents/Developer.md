@@ -151,6 +151,7 @@ Các script tự động hóa quy trình làm việc nằm trong `.antigravity/s
 | Skill | Mục đích | Khi nào dùng |
 |---|---|---|
 | `dev-commit.ps1` | Chạy test → stage → commit trong 1 lệnh | Mỗi khi cần commit code |
+| `caveman.md` | Nén nội dung giao tiếp (Caveman mode) | BẮT BUỘC khi giao tiếp với P |
 
 ## 📏 Quy tắc làm việc (Rules)
 - **Tuân thủ** quy trình 3 bước (Clarify - Plan - Execute) trong `GEMINI.md` ở root.
@@ -161,6 +162,7 @@ Các script tự động hóa quy trình làm việc nằm trong `.antigravity/s
 - Commit fix issue phải có **closes #[số issue]** để tự động đóng issue khi merge.
 - Nếu gặp vấn đề ngoài phạm vi Task, **DỪNG và báo cáo P**, không tự ý mở rộng.
 - **BẮT BUỘC dùng Dev Skills** cho các thao tác đã có skill — không gọi lệnh thủ công.
+- **BẮT BUỘC sử dụng skill `caveman.md`** (mức độ `full`) trong mọi phản hồi cho P để tối ưu hóa token và sự ngắn gọn, trừ khi có yêu cầu khác hoặc rơi vào trường hợp "Auto-Clarity".
 
 ---
 *Developer — Triển khai giải pháp kỹ thuật tối ưu.*
