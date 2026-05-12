@@ -71,7 +71,19 @@ Stored as JSON files:
 - **Bulk Import**: Paste JP terms list, AI translates, handles conflicts (Keep Old vs. Use New).
 
 ### 4.5 Domain Detection
-- AI analyzes a text sample to suggest the best matching domain or create a new one.
+- **Trigger Methods**:
+    - **Automatic**: Triggered immediately after a successful DOCX upload.
+    - **Manual**: Triggered by clicking the **✨** button next to the domain dropdown in the TopBar.
+- **Processing Logic**:
+    - AI analyzes a text sample (up to 5000 chars) and returns a domain name in **Vietnamese** (e.g., "Y tế", "Công nghệ thông tin").
+    - **Match Found**: Automatically updates the dropdown selection.
+    - **New Domain Found**:
+        - Automatic Mode: Displays a suggestion popup.
+        - Manual Mode: Automatically creates the new domain repository and selects it silently.
+- **Manual Domain Addition**:
+    - A **(+)** button next to the dropdown allows users to manually add a domain via a popup dialog.
+    - **Validation**: If the domain exists, inform the user and select it. If new, create the repository and select it.
+- **Feedback**: Displays Toast notifications in the Bottom Bar indicating the analysis status and result.
 
 ### 4.6 Consistency Checker
 - Compares term counts between JP and VN text.

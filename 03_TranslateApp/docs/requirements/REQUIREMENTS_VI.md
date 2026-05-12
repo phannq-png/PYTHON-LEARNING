@@ -142,18 +142,25 @@ File cấu hình mã hóa lưu trữ:
 
 #### 4.2.1 Cấu trúc Bố cục
 Cửa sổ chính được chia thành:
-- **Menu Bar**: Thanh menu hệ thống nằm trên cùng cửa sổ, chứa các mục:
-  - `File`: Mở file, Thoát ứng dụng
-  - `Settings`: Segmentation Settings (mở Dialog), API Settings (mở Dialog)
-  - `Help`: About
-- **Thanh Trên (Top Bar)**: Nút upload file, Dropdown chọn lĩnh vực, Nút Export
-- **Thanh Bên Trái**: Danh sách điều hướng trang
+- **Thanh Trên (Top Bar)**: 
+  - Bên trái: Ô tìm kiếm văn bản (tích hợp nút xóa ✕), nút Tìm kiếm (🔍), Dropdown chọn lĩnh vực, nút Thêm lĩnh vực (+), nút Nhận diện (✨).
+  - Bên phải: Nút Upload, nút Export.
+- **Thanh Bên Trái**: Danh sách điều hướng trang, nút Xóa kết quả tìm kiếm (chỉ hiện khi có kết quả), Phần chú thích trạng thái (Legend) có thể thu gọn.
 - **Panel Trung tâm (Chia ngang)**:
   - Trên: Văn bản tiếng Nhật (chỉ đọc)
   - Dưới: Văn bản tiếng Việt (có thể chỉnh sửa)
   - Thanh phân cách ngang giữa chúng
-- **Thanh Bên Phải**: Thuật ngữ đang active cho trang hiện tại
-- **Thanh Dưới**: Các nút thao tác và bộ đếm token
+- **Thanh Bên Phải**: Thuật ngữ đang active cho trang hiện tại.
+- **Thanh Dưới**: Các nút thao tác và bộ đếm token.
+
+#### 4.2.0 Menu Bar (Thanh menu hệ thống)
+Thanh menu nằm trên cùng cửa sổ, chứa các mục:
+- `File`: Mở file DOCX, Lịch sử phiên dịch, Thoát ứng dụng.
+- `Settings`: Segmentation Settings, API Settings, Preferences (Giao diện), Export/Import All Settings.
+- `Tools`: Quản lý thuật ngữ, Quản lý lĩnh vực.
+- `Help`: 
+    - **Hướng dẫn sử dụng**: Mở cửa sổ hướng dẫn chi tiết cách dùng các tính năng.
+    - **About**: Thông tin phiên bản.
 
 #### 4.2.2 Yêu cầu Hiển thị
 - Hướng chia: Ngang (tiếng Nhật trên, tiếng Việt dưới)
@@ -164,9 +171,12 @@ Cửa sổ chính được chia thành:
 
 #### 4.2.3 Điều hướng Trang
 - Định dạng hiển thị: ◀ [Số Trang Hiện tại]/[Tổng Số Trang] ▶
-- Click nút mũi tên để di chuyển giữa các trang
-- Click số trang trong thanh bên trái để nhảy trực tiếp
-- Tự động lưu trang hiện tại khi điều hướng sang trang khác
+- Click nút mũi tên để di chuyển giữa các trang.
+- Click số trang trong thanh bên trái để nhảy trực tiếp.
+- Tự động lưu trang hiện tại khi điều hướng sang trang khác.
+- **Chú thích trạng thái (Legend)**:
+    - Nằm dưới cùng của danh sách trang.
+    - Có nút toggle (🔼/🔽) để thu gọn hoặc mở rộng, giúp tăng diện tích hiển thị danh sách trang.
 
 #### 4.2.4 Chức năng Các Nút
 
@@ -184,16 +194,19 @@ Cửa sổ chính được chia thành:
 - Người dùng có thể sao chép thủ công sang ChatGPT, Gemini hoặc công cụ AI khác
 
 **Nút Check Page (Kiểm tra Trang)**
-- Chạy xác thực tính nhất quán trên trang hiện tại
-- So sánh tần suất thuật ngữ giữa tiếng Nhật và tiếng Việt
-- Hiển thị dialog popup với kết quả kiểm tra
+- Chạy xác thực tính nhất quán trên trang hiện tại.
+- So sánh tần suất thuật ngữ giữa tiếng Nhật và tiếng Việt.
+- **Tính bền vững**: Danh sách các lỗi (mismatches) được lưu vào session của từng trang. Khi chuyển trang và quay lại, trạng thái lỗi sẽ được khôi phục tự động mà không cần check lại.
+- Hiển thị dialog popup với kết quả kiểm tra.
 - Liệt kê các trường hợp không khớp nếu tìm thấy
 
 **Nút Save (Lưu)**
 - Lưu toàn bộ phiên vào file JSON
 - Bao gồm tất cả các trang và trạng thái dịch của chúng
 - Cập nhật timestamp sửa đổi gần nhất
-- Xác nhận hoàn tất lưu cho người dùng
+- **Thông báo**: 
+  - Lưu thủ công: Hiển thị dialog `messagebox.showinfo` xác nhận lưu thành công.
+  - Tự động lưu: Thực hiện im lặng (silent), chỉ hiện toast ở thanh trạng thái nếu cần, không làm gián đoạn người dùng.
 
 ---
 
@@ -203,17 +216,22 @@ Cửa sổ chính được chia thành:
 - Chỉ hiển thị các thuật ngữ xuất hiện trong trang hiện tại
 - Tự động cập nhật khi chuyển trang
 - Định dạng hiển thị cho mỗi thuật ngữ:
-  - Biểu tượng checkmark
+  - **Biểu tượng trạng thái**: 
+    - Hiển thị `✓` (Xanh lá) nếu thuật ngữ khớp hoặc chưa kiểm tra.
+    - Hiển thị `×` (Đỏ) nếu sau khi "Check Page" phát hiện thuật ngữ bị dùng sai hoặc thiếu.
   - Thuật ngữ tiếng Nhật
   - Ký hiệu mũi tên
   - Bản dịch tiếng Việt
 - Hiển thị số lần xuất hiện trong ngoặc đơn
 
 #### 4.3.2 Tính năng Tương tác
-- Click vào bất kỳ thuật ngữ nào để nhảy đến lần xuất hiện đầu tiên trong văn bản
-- Làm nổi bật tất cả các lần xuất hiện của thuật ngữ đã click
-- Click lại để bỏ làm nổi bật
-- Chỉ báo trực quan về thuật ngữ nào đang được chọn
+- Click vào bất kỳ thuật ngữ nào ở cột bên phải để thực hiện:
+  - Làm nổi bật (Highlight) đồng thời cả thuật ngữ tiếng Nhật ở khung Nguồn và bản dịch tiếng Việt ở khung Bản dịch.
+  - Tự động cuộn (Scroll) cả hai khung văn bản đến vị trí xuất hiện đầu tiên của thuật ngữ đó.
+- **Toggle Highlight**: Click lần nữa vào cùng một thuật ngữ hoặc nhấn phím `Esc` để bỏ highlight thuật ngữ đang chọn.
+- **Màu sắc Highlight**: Màu Vàng Cam (`#F39C12`) cho thuật ngữ được chọn để phân biệt với màu Vàng tươi của Tìm kiếm.
+- Chỉ báo trực quan về thuật ngữ nào đang được chọn trong danh sách sidebar.
+- **Tính bền vững**: Highlight chọn thuật ngữ sẽ bị xóa khi chuyển trang, nhưng kết quả Check (dấu X đỏ) vẫn được giữ nguyên.
 
 ---
 
@@ -234,6 +252,8 @@ Cửa sổ quản lý thuật ngữ chứa:
   - Bản dịch tiếng Việt
   - Tên lĩnh vực
   - Thao tác (nút Edit, Delete)
+- **Giới hạn Hiển thị**: Để tối ưu hiệu năng và trải nghiệm, giao diện quản lý thuật ngữ chỉ hiển thị tối đa 2 tab: Tab `common` và Tab của lĩnh vực hiện đang được chọn ở màn hình chính.
+- **Trạng thái Trống**: Nếu người dùng chưa chọn lĩnh vực chuyên ngành ở màn hình chính, hệ thống hiển thị màn hình hướng dẫn yêu cầu quay lại chọn lĩnh vực trước khi quản lý thuật ngữ.
 
 #### 4.4.3 Thao tác CRUD
 
@@ -304,8 +324,20 @@ Cửa sổ quản lý thuật ngữ chứa:
 7. Hiển thị tóm tắt kết quả
 
 **Luồng Giao diện Người dùng**
-- Vùng văn bản để dán thuật ngữ tiếng Nhật
-- Nút AI Translate
+- **Vùng văn bản Nhập liệu**: Để dán danh sách thuật ngữ tiếng Nhật.
+- **Nút ✨ Làm sạch (Xóa số/ký hiệu đầu)**: 
+  - Sử dụng Regex để tự động xóa các số thứ tự (1, 2, 3, １, ２...), các nhãn alphanumeric (1a, 1b1, 1c2...), dấu phẩy, dấu chấm và khoảng trắng thừa ở đầu dòng.
+  - Tự động lọc trùng lặp ngay trong danh sách nhập liệu (chỉ giữ lại 1 dòng duy nhất cho mỗi thuật ngữ tiếng Nhật).
+- **Vùng văn bản Yêu cầu bổ sung**: 
+  - Cho phép nhập các quy tắc dịch thuật (Prompt rules) tùy chỉnh.
+  - **Tính bền vững**: Các quy tắc này phải được lưu trữ riêng biệt cho mỗi lĩnh vực (domain). Khi người dùng quay lại lĩnh vực đó, các quy tắc cũ sẽ tự động được nạp lại.
+- **Nút Dịch & Nhập vào ✨**: 
+  - Gọi AI dịch thuật ngữ theo ngữ cảnh lĩnh vực hiện tại.
+  - Tự động loại bỏ các từ đã tồn tại trong glossary hiện tại.
+  - Chỉ cho phép các từ duy nhất trong phạm vi 1 chuyên ngành (không cấm trùng lặp giữa các chuyên ngành khác nhau).
+- **Giao diện & Trải nghiệm**:
+  - Cửa sổ Bulk Import khi mở ra phải được căn giữa màn hình chính.
+  - Các vùng văn bản (Textarea) phải được cân đối kích thước, tránh khoảng trắng thừa không cần thiết.
 - Chỉ báo tiến trình trong khi dịch
 - Dialog xem xét hiển thị:
   - Thuật ngữ mới (tự động chấp nhận)
@@ -317,35 +349,45 @@ Cửa sổ quản lý thuật ngữ chứa:
 
 ### 4.5 Tính năng Phát hiện Lĩnh vực
 
-#### 4.5.1 Phương thức Phát hiện
-Người dùng có thể kích hoạt phát hiện lĩnh vực bằng:
-- Chọn một trang từ giao diện chính
-- Dán mẫu văn bản vào bộ phát hiện lĩnh vực
+#### 4.5.1 Phương thức Kích hoạt
+Người dùng có thể kích hoạt phát hiện lĩnh vực bằng hai cách:
+1. **Tự động**: Hệ thống tự động kích hoạt ngay sau khi nạp file DOCX thành công.
+2. **Thủ công**: Nhấn nút **✨** cạnh dropdown lĩnh vực trên TopBar của giao diện chính.
 
 #### 4.5.2 Quy trình Phát hiện
-1. Người dùng cung cấp đầu vào (chọn trang hoặc dán văn bản)
-2. Hệ thống gọi API Phát hiện Lĩnh vực
-3. AI phân tích văn bản và đề xuất tên lĩnh vực
-4. Hệ thống tìm kiếm lĩnh vực hiện có để khớp
-5. Nếu tìm thấy khớp: Hiển thị tên lĩnh vực đã khớp
-6. Nếu không khớp: Đề xuất tạo lĩnh vực mới với tên do AI cung cấp
-7. Người dùng xác nhận hoặc chỉnh sửa tên lĩnh vực
-8. Hệ thống tải glossary tương ứng cho lĩnh vực đó
+1. Hệ thống lấy mẫu văn bản tiếng Nhật (tối đa 5000 ký tự).
+2. Gọi API AI (Gemini/OpenAI) để nhận diện lĩnh vực chuyên ngành.
+3. AI phải trả về tên lĩnh vực bằng **tiếng Việt**, ngắn gọn (1-3 từ), viết hoa chữ cái đầu (ví dụ: "Y tế", "Công nghệ thông tin").
+4. Hệ thống đối soát với danh sách lĩnh vực hiện có:
+   - **Nếu tìm thấy khớp**: Tự động chuyển dropdown sang lĩnh vực đó.
+   - **Nếu không khớp (Lĩnh vực mới)**:
+     - Chế độ Tự động: Hiện Popup gợi ý người dùng tạo lĩnh vực mới.
+     - Chế độ Thủ công: Tự động tạo file JSON và chọn luôn lĩnh vực đó (không hiện popup).
+5. Hiển thị thông báo "Toast" ở thanh trạng thái để thông báo kết quả cho người dùng.
 
 #### 4.5.3 Logic Khớp Lĩnh vực
-- AI trả về tên lĩnh vực được đề xuất (ví dụ: "Medical", "Legal")
-- Hệ thống thực hiện tìm kiếm không phân biệt chữ hoa/thường trong lĩnh vực hiện có
-- Khớp mờ để tìm các khớp gần
-- Nếu độ tin cậy cao: Tự động chọn lĩnh vực đã khớp
-- Nếu độ tin cậy thấp: Hiển thị nhiều đề xuất để người dùng chọn
+- So sánh không phân biệt chữ hoa/thường giữa kết quả AI và danh sách hiện có.
+- Ưu tiên các khớp chính xác.
 
-#### 4.5.4 Tạo Lĩnh vực Mới
-- AI đề xuất tên lĩnh vực dựa trên nội dung văn bản
-- Người dùng có thể chấp nhận hoặc chỉnh sửa tên được đề xuất
-- Hệ thống tạo file glossary trống mới cho lĩnh vực đó
-- **Quan trọng**: Không tạo glossary mẫu tự động
-- Lĩnh vực mới xuất hiện trong danh sách lĩnh vực ngay lập tức
-- Người dùng phải tự thêm thuật ngữ vào lĩnh vực mới
+#### 4.5.4 Thêm Lĩnh vực Thủ công
+Người dùng có thể chủ động thêm lĩnh vực mới ngay tại TopBar:
+1. **Nút Thêm (+)**: Nằm cạnh dropdown lĩnh vực.
+2. **Quy trình**:
+   - Hiển thị Dialog với ô nhập liệu (Textbox).
+   - Kiểm tra tính duy nhất của tên lĩnh vực (không phân biệt hoa/thường).
+   - **Nếu đã tồn tại**: Hiển thị thông báo "Lĩnh vực đã tồn tại" và tự động chuyển dropdown sang lĩnh vực đó.
+   - **Nếu chưa có**: Tạo file glossary mới, cập nhật danh sách và tự động chọn lĩnh vực vừa tạo.
+
+#### 4.5.5 Quản lý Lĩnh vực (Domain Manager)
+Ngoài việc thêm nhanh, ứng dụng cung cấp giao diện quản lý chuyên sâu:
+- **Danh sách Lĩnh vực**: Hiển thị toàn bộ các chuyên ngành hiện có.
+- **Thêm/Sửa/Xóa**:
+    - Cho phép đổi tên (Rename) lĩnh vực hiện có (trừ 'common').
+    - Cho phép xóa lĩnh vực.
+- **Ràng buộc an toàn**:
+    - Không được phép sửa hoặc xóa lĩnh vực `common`.
+    - **Cảnh báo dữ liệu**: Nếu lĩnh vực đang chứa thuật ngữ, hệ thống phải hiển thị cảnh báo xác nhận trước khi xóa.
+- **Đồng bộ**: Cập nhật ngay lập tức danh sách dropdown ở màn hình chính sau khi thay đổi.
 
 ---
 
@@ -421,68 +463,47 @@ Khi chuẩn bị dịch:
 - Glossary Medical: {"システム": "Hệ thống y tế"}
 - Kết quả gộp: {"システム": "Hệ thống y tế"} (Medical thắng)
 
-#### 4.7.3 Cấu trúc Prompt Dịch
-Prompt gửi đến AI phải bao gồm:
-- Định nghĩa vai trò (dịch giả chuyên nghiệp)
-- Phần quy tắc glossary quan trọng
-- Danh sách tất cả thuật ngữ với bản dịch
-- Hướng dẫn tuân thủ nghiêm ngặt glossary
-- Hướng dẫn duy trì các dấu định dạng
-- Văn bản tiếng Nhật cần dịch
-- Yêu cầu đầu ra bản dịch tiếng Việt
+#### 4.7.3 Cấu trúc Prompt Dịch Standardized
+Prompt gửi đến AI phải tuân thủ nghiêm ngặt 6 quy tắc (STRICT RULES):
+1. **NGÔN NGỮ ĐẦU RA**: Bắt buộc trả về kết quả bằng TIẾNG VIỆT.
+2. **TUÂN THỦ THUẬT NGỮ**: Sử dụng đúng các cặp thuật ngữ `{jp} -> {vn}` được cung cấp.
+3. **GIỮ NGUYÊN ĐỊNH DẠNG**: Tuyệt đối giữ nguyên Markdown (**, #...) và các ngoặc đặc biệt 【 】, 「 」, 『 』.
+4. **GIỮ CẤU TRÚC DÒNG**: Giữ nguyên vị trí xuống dòng của văn bản gốc.
+5. **KHÔNG GIẢI THÍCH**: Chỉ trả về bản dịch thuần túy.
+6. **TƯƠNG ĐỒNG SỐ CÂU**: Số lượng câu dịch phải bằng chính xác số lượng câu gốc (không gộp/tách câu).
+
+**Văn bản thuộc lĩnh vực**: Phải truyền kèm tên lĩnh vực hiện tại vào prompt để AI có ngữ cảnh dịch tốt nhất.
+
+#### 4.7.4 Cấu trúc Prompt Dịch Thuật ngữ Hàng loạt
+Prompt dịch hàng loạt tuân thủ cấu trúc 3 phần nghiêm ngặt:
+1. **NHIỆM VỤ**: Dịch danh sách sang tiếng Việt.
+2. **QUY TẮC BẮT BUỘC**: Tích hợp các yêu cầu bổ sung từ người dùng (ví dụ: ưu tiên dịch `部材` là "linh kiện").
+3. **ĐỊNH DẠNG ĐẦU RA**: JSON thuần túy, không có markdown, cấu trúc `{"terms": [{"jp": "...", "vn": "..."}]}`.
 
 ---
 
-### 4.8 Quản lý API
+### 4.8 Quản lý API (Đa cấu hình & Failover)
+#### 4.8.1 Hệ thống Quản lý Danh sách Key
+Ứng dụng cho phép quản lý không giới hạn số lượng API Key:
+- **Danh sách tập trung**: Quản lý tất cả các Key từ Gemini và OpenAI trong một giao diện danh sách.
+- **Thông tin chi tiết**: Mỗi Key có Tên gợi nhớ, Loại dịch vụ, Model, và API Key (được ẩn).
+- **Thao tác**: Thêm mới, Chỉnh sửa, Xóa hoặc Kiểm tra kết nối riêng lẻ (⚡).
 
-#### 4.8.1 Cấu hình API Kép
-Ứng dụng yêu cầu hai cấu hình API riêng biệt:
+#### 4.8.2 Trạng thái và Kích hoạt
+- **Tự động Kiểm tra**: Hệ thống tự động kiểm tra trạng thái Key khi khởi động ứng dụng.
+- **Icon Trạng thái**: Màu Xanh (Hoạt động) hoặc Đỏ (Lỗi).
+- **Lựa chọn Mặc định**: Người dùng chọn một Key ưu tiên bằng biểu tượng ngôi sao (★).
 
-**API Dịch**
-- Dùng cho: Dịch nội dung tài liệu
-- Nhà cung cấp có thể cấu hình: OpenAI hoặc Gemini
-- Người dùng chọn model cụ thể (ví dụ: gpt-4o, gemini-1.5-pro)
+#### 4.8.3 Chiến lược Failover và Tải trọng (Load Balancing)
+- **Lựa chọn Ngẫu nhiên**: Đối với mỗi tác vụ AI, hệ thống chọn ngẫu nhiên một Key từ danh sách các Key đang có trạng thái "Hoạt động".
+- **Cơ chế Thử lại (Failover)**: Nếu Key được chọn gặp lỗi, hệ thống tự động thử lần lượt các Key khác trong danh sách cho đến khi thành công.
+- **Thông báo**: Chỉ hiển thị thông báo lỗi nếu tất cả các Key đều không hoạt động.
+- **Mục đích**: Đảm bảo tính ổn định cao và tận dụng tối đa giới hạn quota của nhiều tài khoản.
 
-**API Phát hiện Lĩnh vực**
-- Dùng cho: Xác định lĩnh vực/chủ đề tài liệu
-- Nhà cung cấp có thể cấu hình: OpenAI hoặc Gemini
-- Người dùng chọn model cụ thể (thường là model nhẹ/nhanh hơn)
-
-#### 4.8.2 Giao diện Cài đặt API
-Cửa sổ cài đặt API chứa:
-- Hai phần cấu hình riêng biệt (Dịch và Phát hiện Lĩnh vực)
-- Với mỗi API:
-  - Dropdown chọn nhà cung cấp (OpenAI / Gemini)
-  - Trường văn bản API Key (ẩn dưới dạng mật khẩu)
-  - Dropdown chọn model
-- Nút Import/Export cấu hình
-- Nút Save và Cancel
-
-#### 4.8.3 Yêu cầu Bảo mật
-- Tất cả API key phải được mã hóa trước khi lưu trữ
-- Sử dụng mã hóa đối xứng Fernet từ thư viện cryptography
-- Key mã hóa được lưu trong file riêng: data/config/.secret.key
-- Không bao giờ hiển thị API key trong UI (hiển thị dưới dạng ẩn: **********)
-- API key không bao giờ được đưa vào file export glossary
-- API key không bao giờ được đưa vào file session
-- API key không bao giờ được ghi vào file log
-
-#### 4.8.4 Theo dõi Sử dụng Token
-Ứng dụng phải theo dõi:
-- **Sử dụng token mỗi trang**: Token tiêu thụ cho mỗi trang dịch
-- **Tổng sử dụng token**: Tổng của tất cả các trang trong phiên hiện tại
-- Định dạng hiển thị: "Tokens: 1.5K (Trang) | 15.2K (Tổng)"
-- Theo dõi riêng cho API Dịch và API Phát hiện Lĩnh vực
-- Lưu số lượng token vào dữ liệu phiên
-- Hiển thị trong thanh dưới của cửa sổ chính
-
-**Không Giới hạn Tốc độ**
-- Không áp đặt giới hạn nhân tạo trên số lần gọi API
-- Theo dõi sử dụng chỉ cho mục đích thông tin
-- Để nhà cung cấp API xử lý giới hạn tốc độ
-- Hiển thị sử dụng để giúp người dùng quản lý chi phí
-
----
+#### 4.8.4 Bảo mật API
+- **Mã hóa**: Tất cả các Key được lưu trữ dưới dạng mã hóa Fernet an toàn.
+- **Ẩn thông tin**: Không bao giờ hiển thị API Key dưới dạng text thuần trên UI.
+- **Loại trừ Log**: API Key không bao giờ được ghi vào file log hoặc file xuất dữ liệu.
 
 ### 4.9 Quản lý Phiên làm việc
 
@@ -529,14 +550,47 @@ Khi khởi động ứng dụng:
   - Tiếp tục từ nơi người dùng dừng lại
 
 #### 4.9.4 Giới hạn Phiên Đơn
-- Chỉ một phiên có thể active tại một thời điểm
-- Mở file mới yêu cầu lưu phiên hiện tại
-- Không thể làm việc trên nhiều tài liệu cùng lúc
 - Chuyển phiên yêu cầu xác nhận lưu hoặc hủy
 
 ---
 
-### 4.10 Chức năng Export
+### 4.14 Chức năng Tìm kiếm Văn bản (Text Search)
+
+#### 4.14.1 Menu Chuột phải (Context Menu)
+Khi người dùng bôi đen văn bản và click chuột phải tại ô Nguồn tiếng Nhật, menu sẽ hiển thị thêm các tùy chọn:
+- **Tìm kiếm (Trang này)**: Tìm và làm nổi bật (Highlight) tất cả các vị trí xuất hiện của văn bản đã chọn ngay tại trang hiện tại.
+- **Tìm kiếm (Toàn bộ)**: Tìm kiếm văn bản trên tất cả các trang của tài liệu.
+
+#### 4.14.2 Quy tắc Highlight
+- **Màu sắc**: Sử dụng màu **Vàng** (`#F1C40F`) để phân biệt với màu highlight thuật ngữ thông thường.
+- **Tại trang hiện tại**: Highlight trực tiếp trong khung văn bản tiếng Nhật.
+- **Tại danh sách trang (Sidebar)**: Các trang có chứa kết quả tìm kiếm sẽ được đổi màu nền sang màu vàng trong danh sách điều hướng ở thanh bên trái.
+
+#### 4.14.3 Quản lý kết quả Tìm kiếm
+- **Thông báo**: Khi thực hiện tìm kiếm, hệ thống hiển thị `messagebox.showinfo` thông báo số lượng trang tìm thấy hoặc thông báo "Không tìm thấy".
+- **Xóa kết quả**: 
+  - Tại sidebar sẽ xuất hiện một nút **Clear (✕)** cạnh tiêu đề "DANH SÁCH TRANG" khi đang có kết quả tìm kiếm.
+  - Tại ô tìm kiếm ở TopBar có tích hợp nút xóa nhanh (✕) ở bên trong góc phải.
+  - Nhấn nút Clear hoặc phím `Esc` để xóa toàn bộ highlight màu vàng ở cả sidebar và khung văn bản.
+- **Tính thủ công**: Việc xóa highlight tìm kiếm chỉ thực hiện khi người dùng nhấn nút Clear, phím `Esc` hoặc bắt đầu một cuộc tìm kiếm mới. Việc chuyển trang không tự động xóa highlight màu vàng ở sidebar.
+
+---
+
+### 4.11 Sao lưu và Khôi phục (Backup & Restore)
+Hệ thống cho phép người dùng đóng gói và khôi phục toàn bộ dữ liệu làm việc:
+- **Export All Settings**: Đóng gói toàn bộ cấu hình (`api_config.json`, các file `.json` trong `glossaries/`, các file `.key`) vào một file nén `.zip`.
+- **Import All Settings**: Giải nén và ghi đè toàn bộ cấu hình hiện tại từ file `.zip`.
+- **An toàn**: Yêu cầu người dùng xác nhận trước khi khôi phục vì hành động này sẽ ghi đè dữ liệu hiện tại.
+
+### 4.12 Tùy chọn Hiển thị (Preferences)
+Các cài đặt cá nhân hóa giao diện được quản lý riêng biệt:
+- **Chế độ hiển thị**: Hỗ trợ **Dark Mode** và **Light Mode**.
+- **Độc lập**: Cấu hình Preferences được lưu trong `preferences.json` và **không** bị ghi đè khi thực hiện Import/Export toàn bộ cài đặt hệ thống (giữ nguyên trải nghiệm cá nhân).
+- **Tự động áp dụng**: Chế độ hiển thị được nạp và áp dụng ngay khi ứng dụng khởi động.
+
+---
+
+### 4.13 Chức năng Export
 
 #### 4.10.1 Tùy chọn Export
 Dialog export cung cấp:
@@ -650,15 +704,17 @@ Quy trình export phải:
 - Tùy chọn thử khôi phục hoặc xóa phiên bị hỏng
 
 ### 5.4 Ghi Log Lỗi
-- Tất cả lỗi được ghi vào: data/logs/error.log
-- Định dạng log bao gồm:
+- **Hệ thống log xoay vòng**: Sử dụng `TimedRotatingFileHandler` để ghi log theo ngày.
+- **Tách biệt log**:
+    - `app.log`: Ghi lại toàn bộ thông tin hoạt động (INFO, DEBUG, ERROR).
+    - `error.log`: Chỉ ghi lại các lỗi nghiêm trọng (ERROR, CRITICAL).
+- **Chính sách lưu trữ**: Tự động xóa các file log cũ sau **7 ngày**.
+- **Định dạng log**:
   - Timestamp
   - Loại lỗi
   - Thông báo lỗi
   - Stack trace (cho developers)
   - Hành động người dùng tại thời điểm lỗi
-- File log tự động xoay vòng khi vượt quá 10MB
-- Giữ 5 file log gần nhất
 
 ---
 
@@ -705,16 +761,18 @@ Quy trình export phải:
 - Thời gian còn lại ước tính (khi có thể tính)
 - Nút Cancel khi phù hợp
 
-**Trạng thái Đang tải**
-- Spinner cho các thao tác ngắn (dưới 3 giây)
-- Vô hiệu hóa các yếu tố UI trong khi xử lý
-- Thay đổi con trỏ thành con trỏ đang tải
-- Ngăn tương tác người dùng trong các thao tác quan trọng
+**Trạng thái Đang tải (Global Spinner)**
+- **Spinner Toàn màn hình**: Hiển thị dưới dạng một lớp phủ (Overlay) bán trong suốt toàn bộ cửa sổ chính.
+- **Màu sắc Overlay**: `fg_color=("gray85", "gray15")` để tạo hiệu ứng làm mờ (Dimmed) màn hình phía sau.
+- **Chặn tương tác**: Vô hiệu hóa toàn bộ các nút bấm và vùng nhập liệu bên dưới lớp phủ, ngăn người dùng thao tác trong khi chờ AI xử lý.
+- **Hình ảnh Spinner**: Sử dụng icon vòng tròn 12 chấm tối giản, quay 30 độ mỗi bước để tạo hiệu ứng mượt mà.
+- **Con trỏ**: Thay đổi con trỏ thành con trỏ đang tải khi spinner hiển thị.
 
 ### 6.3 Hành vi Cửa sổ
 
 **Cửa sổ Chính**
 - Kích thước tối thiểu: 1200px chiều rộng × 800px chiều cao
+- Khởi động ở chế độ phóng to (**Maximized**) trên Windows.
 - Có thể thay đổi kích thước bởi người dùng
 - Nhớ kích thước và vị trí cuối cùng
 - Khôi phục khi khởi động lại ứng dụng
@@ -742,7 +800,8 @@ Quy trình export phải:
 - Bình thường, Hover, Nhấn, Vô hiệu hóa
 - Phản hồi trực quan khi click
 - Vô hiệu hóa nút trong khi xử lý
-- Tooltip khi hover hiển thị chức năng nút
+- Vô hiệu hóa nút trong khi xử lý
+- **Tooltip**: Hiển thị chú thích ngắn gọn khi di chuột (hover) qua các nút bấm sau một khoảng trễ ngắn (0.5s).
 
 **Hành vi Dialog**
 - Dialog modal chặn cửa sổ chính

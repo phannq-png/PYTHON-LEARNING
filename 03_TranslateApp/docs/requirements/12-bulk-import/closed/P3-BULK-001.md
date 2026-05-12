@@ -6,7 +6,7 @@
 - **Phase**: 3
 - **Estimated Effort**: L
 - **Dependencies**: P3-GLOS-003, P2-API-001
-- **Status**: opening
+- **Status**: closed
 
 ## Mô tả
 
@@ -15,15 +15,18 @@ Xây dựng chức năng cho phép người dùng nhập hàng loạt thuật ng
 
 ### Phạm vi
 **Làm:**
-- [ ] Tạo một cửa sổ dialog mới `BulkImportWindow`.
-- [ ] Giao diện có một `CTkTextbox` lớn để người dùng dán danh sách thuật ngữ (mỗi dòng một thuật ngữ).
-- [ ] Một nút "Translate & Import" để bắt đầu quá trình.
-- [ ] Gọi API dịch (ví dụ: Gemini/OpenAI) để dịch toàn bộ danh sách.
-- [ ] Xử lý kết quả:
+- [x] Tạo một cửa sổ dialog mới `BulkImportWindow`.
+- [x] Giao diện có một `CTkTextbox` lớn để người dùng dán danh sách thuật ngữ (mỗi dòng một thuật ngữ).
+- [x] Một nút "Translate & Import" để bắt đầu quá trình.
+- [x] Gọi API dịch (ví dụ: Gemini/OpenAI) để dịch toàn bộ danh sách.
+- [x] Xử lý kết quả:
     - Thuật ngữ mới: Tự động thêm.
     - Trùng lặp (cùng bản dịch): Bỏ qua.
     - Xung đột (khác bản dịch): Hiển thị dialog `ConflictResolutionWindow` để người dùng quyết định "Giữ cũ" hay "Dùng mới" cho từng trường hợp.
-- [ ] Hiển thị một dialog tóm tắt kết quả cuối cùng (thêm mới, bỏ qua, cập nhật).
+- [x] Hiển thị một dialog tóm tắt kết quả cuối cùng (thêm mới, bỏ qua, cập nhật).
+- [x] Cân đối 2 textarea, tránh khoảng trắng không cần thiết.
+- [x] Tự động căn giữa cửa sổ khi khởi động.
+- [x] Lưu lại và tự động nạp "Yêu cầu bổ sung" (Prompt rules) cho từng lĩnh vực.
 
 **KHÔNG làm:**
 - Lưu trữ lịch sử import.

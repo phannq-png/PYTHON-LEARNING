@@ -49,7 +49,9 @@ class SessionManager:
                 "id": i,
                 "jp": text,
                 "vn": "",
-                "status": "pending",
+                "is_translated": False,
+                "check_status": None, # None (unchecked), 'ok', 'error'
+                "is_reviewed": False,
                 "tokens": 0
             })
 

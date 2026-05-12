@@ -122,4 +122,40 @@ Tài liệu này hướng dẫn chi tiết các bước kiểm thử thủ công
 - **Kết quả mong đợi**: Mỗi đoạn văn bản gốc JP đi kèm ngay dưới là đoạn VN tương ứng.
 
 ---
-*Tài liệu được soạn thảo bởi Agent BA.*
+---
+
+## 7. Kiểm thử các Nâng cấp v1.2 (Section 4.11, 4.12, 6.4)
+
+### TS-V12-01: Sao lưu và Khôi phục (Backup/Restore)
+- **Mục tiêu**: Kiểm tra tính toàn vẹn của dữ liệu sau khi backup và restore.
+- **Các bước**:
+    1. Thêm 1-2 thuật ngữ mới.
+    2. Nhấn "Settings" -> "Export All Settings...", lưu file `backup.zip`.
+    3. Xóa các thuật ngữ vừa thêm.
+    4. Nhấn "Settings" -> "Import All Settings...", chọn file `backup.zip`.
+- **Kết quả mong đợi**: Toàn bộ thuật ngữ đã xóa được khôi phục đầy đủ.
+
+### TS-V12-02: Tùy chọn hiển thị (Preferences)
+- **Mục tiêu**: Kiểm tra Light/Dark mode và tính độc lập với backup.
+- **Các bước**:
+    1. Nhấn "Settings" -> "Preferences", chọn "Light". Quan sát giao diện đổi màu.
+    2. Thực hiện "Import All Settings" từ một bản backup trước đó (có thể là Dark mode).
+- **Kết quả mong đợi**: Giao diện vẫn giữ nguyên "Light mode", không bị ghi đè bởi bản backup hệ thống.
+
+### TS-V12-03: Quản lý Lĩnh vực (Domain Manager)
+- **Mục tiêu**: Kiểm tra các ràng buộc an toàn của chuyên ngành.
+- **Các bước**:
+    1. Mở "Tools" -> "Quản lý lĩnh vực".
+    2. Thử nhấn nút Xóa hoặc Sửa tại lĩnh vực `common`.
+    3. Thêm lĩnh vực `TestDomain`, sau đó xóa nó.
+- **Kết quả mong đợi**: Nút tại `common` bị vô hiệu hóa. Các lĩnh vực khác thêm/sửa/xóa bình thường.
+
+### TS-V12-04: Tooltip và Context Menu
+- **Mục tiêu**: Kiểm tra trải nghiệm người dùng mới.
+- **Các bước**:
+    1. Di chuột qua nút "Translate" và giữ 1 giây.
+    2. Bôi đen một từ tiếng Nhật trong khung Nguồn, chuột phải chọn "Add to Glossary".
+- **Kết quả mong đợi**: Tooltip hiện lên giải thích chức năng. Dialog thêm thuật ngữ nhanh hiện ra với từ đã chọn.
+
+---
+*Tài liệu được cập nhật bởi Agent BA.*

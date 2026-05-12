@@ -5,6 +5,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 import customtkinter as ctk
 from src.utils import constants as c
+from src.ui.components.tooltip import add_tooltip
 
 
 class TermItem(ctk.CTkFrame):
@@ -16,7 +17,8 @@ class TermItem(ctk.CTkFrame):
         jp_term: str, 
         vn_term: str, 
         count: int, 
-        on_click: Callable[[str], None],
+        on_click: Callable[[str, str, 'TermItem'], None],
+        status: str = "ok",
         **kwargs
     ):
         super().__init__(
@@ -27,15 +29,20 @@ class TermItem(ctk.CTkFrame):
             **kwargs
         )
         self.jp_term = jp_term
+        self.vn_term = vn_term
         self.on_click = on_click
+        self._is_selected = False
 
         self.grid_columnconfigure(1, weight=1)
 
         # Icon/Checkmark
+        icon = "✓" if status == "ok" else "×"
+        icon_color = c.COLOR_SUCCESS if status == "ok" else c.COLOR_DANGER
+        
         ctk.CTkLabel(
             self, 
-            text="✓", 
-            text_color=c.COLOR_SUCCESS, 
+            text=icon, 
+            text_color=icon_color, 
             font=ctk.CTkFont(family=c.FONT_FAMILY[0], size=14, weight="bold")
         ).grid(row=0, column=0, padx=(c.PADDING_STD, 5))
 
@@ -71,13 +78,23 @@ class TermItem(ctk.CTkFrame):
             widget.bind("<Leave>", self._on_leave)
 
     def _on_enter(self, event=None):
-        self.configure(fg_color=("gray80", "gray25"))
+        if not self._is_selected:
+            self.configure(fg_color=("gray80", "gray25"))
 
     def _on_leave(self, event=None):
-        self.configure(fg_color="transparent")
+        if not self._is_selected:
+            self.configure(fg_color="transparent")
+
+    def set_selected(self, is_selected: bool):
+        """Update visual state for selection."""
+        self._is_selected = is_selected
+        if is_selected:
+            self.configure(fg_color=("#D4AC0D", "#9A7D0A")) # Darker yellow/gold
+        else:
+            self.configure(fg_color="transparent")
 
     def _handle_click(self, event=None):
-        self.on_click(self.jp_term)
+        self.on_click(self.jp_term, self.vn_term, self)
 
 
 class RightSidebar(ctk.CTkFrame):
@@ -86,7 +103,7 @@ class RightSidebar(ctk.CTkFrame):
     def __init__(
         self, 
         master: ctk.CTk, 
-        on_term_click: Optional[Callable[[str], None]] = None,
+        on_term_click: Optional[Callable[[str, str], None]] = None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -97,6 +114,7 @@ class RightSidebar(ctk.CTkFrame):
             **kwargs
         )
         self.on_term_click = on_term_click
+        self._selected_item: Optional[TermItem] = None
         self.pack_propagate(False)
         self._build_widgets()
 
@@ -126,12 +144,13 @@ class RightSidebar(ctk.CTkFrame):
         # Placeholder
         self._show_placeholder()
 
-    def update_terms(self, jp_text: str, glossary: Dict[str, str]) -> None:
+    def update_terms(self, jp_text: str, glossary: Dict[str, str], mismatches: List[Dict] = None) -> None:
         """Scan text for glossary terms and refresh the list.
         
         Args:
             jp_text: The Japanese source text to scan.
             glossary: Merged glossary dictionary (JP -> VN).
+            mismatches: Optional list of mismatches from ConsistencyChecker.
         """
         # Clear existing items
         for child in self.scroll_frame.winfo_children():
@@ -156,21 +175,43 @@ class RightSidebar(ctk.CTkFrame):
         # Sort by count (descending)
         active_terms.sort(key=lambda x: x[2], reverse=True)
 
+        # Extract error terms for quick lookup
+        error_terms = {m["jp_term"] for m in mismatches} if mismatches else set()
+
         # Render items
         for jp, vn, count in active_terms:
+            status = "error" if jp in error_terms else "ok"
             item = TermItem(
                 self.scroll_frame,
                 jp_term=jp,
                 vn_term=vn,
                 count=count,
+                status=status,
                 on_click=self._on_item_clicked
             )
             item.pack(fill="x", pady=1)
+            add_tooltip(item, f"Highlight '{jp}' trong văn bản")
 
-    def _on_item_clicked(self, jp_term: str):
-        """Internal handler for term click."""
-        if self.on_term_click:
-            self.on_term_click(jp_term)
+    def _on_item_clicked(self, jp_term: str, vn_term: str, item: TermItem):
+        """Internal handler for term click with toggle logic."""
+        if self._selected_item == item:
+            # Deselect if clicking the same item
+            self.clear_selection()
+            if self.on_term_click:
+                self.on_term_click("", "") # Signal clear
+        else:
+            # Select new item
+            self.clear_selection()
+            self._selected_item = item
+            item.set_selected(True)
+            if self.on_term_click:
+                self.on_term_click(jp_term, vn_term)
+
+    def clear_selection(self):
+        """Deselect any currently selected term item."""
+        if self._selected_item:
+            self._selected_item.set_selected(False)
+            self._selected_item = None
 
     def _show_placeholder(self) -> None:
         self.lbl_placeholder = ctk.CTkLabel(
