@@ -659,6 +659,9 @@ class AppWindow(ctk.CTk):
         raise Exception(last_err)
 
     def _process_domain_result(self, suggested, manual=False):
+        # Stop spinner first so the UI is unblocked immediately
+        self.after(0, self.spinner.stop)
+        
         self.logger.info(f"AI suggested domain: '{suggested}' (manual={manual})")
         if not suggested or suggested.lower() in ["common", "chung", "không rõ", "tổng quát"]:
             self.show_toast("AI không rõ lĩnh vực. Hãy chọn thủ công ở thanh trên cùng.")
@@ -667,10 +670,6 @@ class AppWindow(ctk.CTk):
         repo = GlossaryRepository("common")
         existing = repo.get_all_domains()
         matched = next((d for d in existing if d.lower() == suggested.lower().strip()), None)
-        
-        # In both manual and auto mode, we now use the custom DomainSuggestionWindow
-        # Hide spinner first so user can interact with the popup
-        self.spinner.stop()
         
         if matched:
             DomainSuggestionWindow(self, suggested_name=matched, is_existing=True, on_confirm=self._handle_apply_existing_domain)
